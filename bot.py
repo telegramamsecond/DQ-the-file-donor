@@ -69,7 +69,7 @@ class Bot(Client):
         offset: int = 0,
     ) -> Optional[AsyncGenerator["types.Message", None]]:
         """Iterate through a chat sequentially.
-        This convenience method does the same as repeatedly calling :meth:`~pyrogram.Client.get_messages` in a loop, thus saving
+        This convenience met hod does the same as repeatedly calling :meth:`~pyrogram.Client.get_messages` in a loop, thus saving
         you from the hassle of setting up boilerplate code. It is useful for getting the whole chat messages with a
         single call.
         Parameters:
