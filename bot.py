@@ -29,9 +29,9 @@ class Bot(Client):
             api_id=API_ID,
             api_hash=API_HASH,
             bot_token=BOT_TOKEN,
-            workers=50,
+            workers=200,
             plugins={"root": "plugins"},
-            sleep_threshold=5,
+            sleep_threshold=10,
         )
 
     async def start(self):
@@ -53,11 +53,7 @@ class Bot(Client):
         now = datetime.now(tz)
         time = now.strftime("%H:%M:%S %p")
         await self.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
-        app = web.AppRunner(await web_server())
-        await app.setup()
-        P = "8080"
-        bind_address = "0.0.0.0"
-        await web.TCPSite(app, bind_address, P).start()
+        
 
     async def stop(self, *args):
         await super().stop()
