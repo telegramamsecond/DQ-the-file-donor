@@ -48,7 +48,7 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 # secondary db 
 SECONDDB_URI = environ.get('SECONDDB_URI', "mongodb+srv://fu19w1ko:kjrNSVZn0MY8qy7y@cluster0.whqp4lj.mongodb.net/?retryWrites=true&w=majority") 
-SECONDDB_NAME = environ.get('SECONDDB_NAME', "Cluster0")
+SECONDDB_NAME = environ.get('SECONDDB_NAME', "Sulu")
 
 
 # Others
