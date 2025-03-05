@@ -182,17 +182,6 @@ async def get_bad_files(query, file_type=None, max_results=1000, offset=0, filte
     cursor.skip(offset).limit(max_results)
     # Get list of files
     files = await cursor.to_list(length=max_results)
-
-    return files, next_offset, total_results
-
-    cursor = Media.find(filter)
-    # Sort by recent
-    cursor.sort('$natural', -1)
-    # Slice files according to offset and max results
-    cursor.skip(offset).limit(max_results)
-    # Get list of files
-    files = await cursor.to_list(length=max_results)
-
     return files, next_offset, total_results
 
 async def get_file_details(query):
