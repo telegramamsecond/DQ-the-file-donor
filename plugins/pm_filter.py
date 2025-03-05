@@ -17,7 +17,7 @@ from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings
 from database.users_chats_db import db
-from database.ia_filterdb import Media, get_file_details, get_search_results, get_bad_files
+from database.ia_filterdb import Media, get_file_details, get_search_results, get_second_results, get_bad_files
 from database.filters_mdb import (
     del_all,
     find_filter,
@@ -1228,12 +1228,17 @@ async def auto_filter(client, msg, spoll=False):
             search = message.text
             files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
             if not files:
+                filess, offset, total_results = await get_second_results(message.chat.id ,search.lower(), offset=0, filter=True)
+            if not filess:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
                 else:
                     if NO_RESULTS_MSG:
                         await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
-                    return
+                    return 
+            else:
+                files = filess
+                await client.send_message(chat_id=LOG_CHANNEL, text="second database file indexed")
         else:
             return
     else:
