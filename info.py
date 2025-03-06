@@ -47,9 +47,9 @@ DATABASE_URI = environ.get('DATABASE_URI', "")
 DATABASE_NAME = environ.get('DATABASE_NAME', "cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 # secondary db 
-SECONDDB_URI = environ.get('SECONDDB_URI', "mongodb+srv://fu19w1ko:kjrNSVZn0MY8qy7y@cluster0.whqp4lj.mongodb.net/?retryWrites=true&w=majority") 
-SECONDDB_NAME = environ.get('SECONDDB_NAME', "Sulu")
-
+SECONDDB_URI = environ.get('SECONDDB_URI', "mongodb+srv://Anjali:hari813142@anjali.jj1pxtg.mongodb.net/?retryWrites=true&w=majority") 
+SECONDDB_NAME = environ.get('SECONDDB_NAME', "Anjali")
+SECONDDB_COLLECTION = environ.get('SECONDDB_COLLECTION', 'techvjcollection')
 
 # Others
 DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '-1001529899497').split()]
