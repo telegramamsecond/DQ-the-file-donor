@@ -7,7 +7,7 @@ from pymongo.errors import DuplicateKeyError
 from umongo import Instance, Document, fields
 from motor.motor_asyncio import AsyncIOMotorClient
 from marshmallow.exceptions import ValidationError
-from info import DATABASE_URI, DATABASE_NAME, COLLECTION_NAME, SECONDDB_URI, SECONDDB_NAME, USE_CAPTION_FILTER, MAX_B_TN
+from info import DATABASE_URI, DATABASE_NAME, COLLECTION_NAME, SECONDDB_URI, SECONDDB_NAME, SECONDDB_COLLECTION, USE_CAPTION_FILTER, MAX_B_TN
 from utils import get_settings, save_group_settings
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ class Media2(Document):
 
     class Meta:
         indexes = ('$file_name', )
-        collection_name = COLLECTION_NAME
+        collection_name = SECONDDB_COLLECTION
 
 async def save_file(media):
     """Save file in database"""
