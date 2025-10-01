@@ -1246,15 +1246,24 @@ async def auto_filter(client, msg, spoll=False):
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
     pre = 'filep' if settings['file_secure'] else 'file'
+    oam = f"{random.choice(RAT)}"
+    oamm = f"{random.choice(RAT)}"
     if settings["button"]:
-        btn = [
+       for file in files:
+           sz = get_size(file.file_size)
+           tt = file.file_name[0:26].title().lstrip()
+           fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
+           dcode = fn[0:23]
+           filenaame = f"{dcode} {oam}{sz[0:3]} {sz[-2:]}{oamm}"
+           btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
+        """btn = [
             [
                 InlineKeyboardButton(
                     text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
                 ),
             ]
             for file in files
-        ]
+        ]"""
     else:
         btn = [
             [
