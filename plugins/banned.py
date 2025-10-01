@@ -23,6 +23,7 @@ async def ban_reply(bot, message):
     user_id = message.from_user.id
     if user_id in ADMINS:
         await db.remove_ban(user_id) 
+        temp.BANNED_USERS.remove(user_id)
         await message.reply("Successfully unbanned uuu 🥂") 
         return
     ban = await db.get_ban_status(message.from_user.id)
