@@ -1229,7 +1229,7 @@ async def auto_filter(client, msg, spoll=False):
         if message.text.startswith("/"): return  # ignore commands
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
-        if len(message.text) < 100:
+        if len(message.text) < 80:
             search = message.text
             files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
             if not files:
@@ -1252,10 +1252,9 @@ async def auto_filter(client, msg, spoll=False):
        btn = []
        for file in files:
            sz = get_size(file.file_size)
-           tt = file.file_name[0:26].title().lstrip()
+           tt = file.file_name[0:30].title().lstrip()
            fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
-           dcode = fn[0:23]
-           filenaame = f"{dcode} {oam}{sz[0:3]} {sz[-2:]}{oamm}"
+           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
     else:
         btn = [
