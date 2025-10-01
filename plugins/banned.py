@@ -21,7 +21,9 @@ disabled_group=filters.create(disabled_chat)
 @Client.on_message(filters.private & banned_user & filters.incoming)
 async def ban_reply(bot, message):
     user_id = message.from_user.id
-    if user_id in ADMINS: return 
+    if user_id in ADMINS: await db.remove_ban(user_id) 
+        await message.reply(f"Successfully unbanned uuu 🥂") 
+        return
     ban = await db.get_ban_status(message.from_user.id)
     await message.reply(f'Sorry Dude, You are Banned to use Me 🙂 \nBan Reason: {ban["ban_reason"]}')
 
