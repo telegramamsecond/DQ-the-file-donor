@@ -1256,14 +1256,6 @@ async def auto_filter(client, msg, spoll=False):
            dcode = fn[0:23]
            filenaame = f"{dcode} {oam}{sz[0:3]} {sz[-2:]}{oamm}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
-        """btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]"""
     else:
         btn = [
             [
