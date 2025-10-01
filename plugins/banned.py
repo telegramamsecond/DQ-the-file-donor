@@ -3,7 +3,7 @@ from utils import temp
 from pyrogram.types import Message
 from database.users_chats_db import db
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from info import SUPPORT_CHAT
+from info import ADMINS, SUPPORT_CHAT
 
 async def banned_users(_, client, message: Message):
     return (
@@ -20,8 +20,10 @@ disabled_group=filters.create(disabled_chat)
 
 @Client.on_message(filters.private & banned_user & filters.incoming)
 async def ban_reply(bot, message):
+    user_id = message.from_user.id
+    if user_id in ADMINS: return 
     ban = await db.get_ban_status(message.from_user.id)
-    await message.reply(f'Sorry Dude, You are Banned to use Me. \nBan Reason: {ban["ban_reason"]}')
+    await message.reply(f'Sorry Dude, You are Banned to use Me 🙂 \nBan Reason: {ban["ban_reason"]}')
 
 @Client.on_message(filters.group & disabled_group & filters.incoming)
 async def grp_bd(bot, message):
