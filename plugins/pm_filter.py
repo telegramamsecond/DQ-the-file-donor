@@ -1249,6 +1249,7 @@ async def auto_filter(client, msg, spoll=False):
     oam = f"{random.choice(RAT)}"
     oamm = f"{random.choice(RAT)}"
     if settings["button"]:
+       btn = []
        for file in files:
            sz = get_size(file.file_size)
            tt = file.file_name[0:26].title().lstrip()
