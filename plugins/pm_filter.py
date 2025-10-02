@@ -72,7 +72,7 @@ async def pm_text(bot, message):
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
-    if int(req) not in [query.from_user.id, 0] and int(req) not in ADMINS:
+    if int(req) not in [query.from_user.id, 0] and [query.from_user.id, 0] not in ADMINS:
         return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
         offset = int(offset)
@@ -265,7 +265,7 @@ async def advantage_spoll_choker(bot, query):
     if movie_ == "close_spellcheck":
         return await query.message.delete()
     movie = movies[(int(movie_))]
-    await query.answer(script.TOP_ALRT_MSG)
+    d = await query.message.edit(script.TOP_ALRT_MSG)
     k = await manual_filters(bot, query.message, text=movie)
     if k == False:
         files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
@@ -277,8 +277,8 @@ async def advantage_spoll_choker(bot, query):
             reqstr = await bot.get_users(reqstr1)
             if NO_RESULTS_MSG:
                 await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
-            k = await query.message.edit(script.MVE_NT_FND)
-            await asyncio.sleep(10)
+            k = await d.edit(script.MVE_NT_FND)
+            await asyncio.sleep(15)
             await k.delete()
 
 
@@ -1482,7 +1482,7 @@ async def advantage_spell_chok(client, msg): #modified spell check
     reqstr = await client.get_users(reqstr1)
     settings = await get_settings(msg.chat.id)
     query = re.sub(
-        r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
+        r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|English|english|Hindi|hindi|Telugu|telugu|1080p|720p|HEVC|Esub|Kannada|kannada|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
         "", msg.text, flags=re.IGNORECASE)  # plis contribute some common words
     query = query.strip() + " movie"
     try:
