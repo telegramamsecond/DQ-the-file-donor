@@ -93,14 +93,15 @@ async def next_page(bot, query):
         return
     settings = await get_settings(query.message.chat.id)
     if settings['button']:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
-                ),
-            ]
-            for file in files
-        ]
+        oam = f"{random.choice(RAT)}"
+        oamm = f"{random.choice(RAT)}"
+        btn = []
+            for file in files:
+                sz = get_size(file.file_size)
+                tt = file.file_name[0:30].title().lstrip()
+                fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
+                filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
+                btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'files#{file.file_id}')])
     else:
         btn = [
             [
