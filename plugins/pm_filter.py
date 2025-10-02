@@ -589,7 +589,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             [InlineKeyboardButton(text="ʀᴇᴩᴏʀᴛ ᴛᴏ ᴀᴅᴍɪɴ",callback_data=f"report_{hari}")]
         )
         reply_markup = InlineKeyboardMarkup(kuttons)
-        await query.message.edit_reply_markup(reply_markup)
         if lang  == "mal":
             a = await query.message.edit_text(INMAL, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
         elif lang  == "tam":
@@ -598,6 +597,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             a = await query.message.edit_text(INHIN, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
         elif lang  == "eng":
             a = await query.message.edit_text(INENG, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+        await query.message.edit_reply_markup(reply_markup)
         await asyncio.sleep(35)
         await a.delete()
         try:
