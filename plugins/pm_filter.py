@@ -72,7 +72,7 @@ async def pm_text(bot, message):
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
-    if int(req) not in [query.from_user.id, 0] or int(req) not in ADMINS:
+    if int(req) not in [query.from_user.id, 0] and int(req) not in ADMINS:
         return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
         offset = int(offset)
@@ -1233,7 +1233,19 @@ async def auto_filter(client, msg, spoll=False):
         if message.text.startswith("/"): return  # ignore commands
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
-        if len(message.text) < 80:
+        men = message.from_user.mention if message.from_user else "Anonymous" 
+        if len(message.text) <= 2:
+            kk = await message.reply_text(f"{men},ɪɴᴄʟᴜᴅᴇ ʏᴇᴀʀ ᴏғ ᴛʜᴇ ᴍᴏᴠɪᴇ. \n\n 𝚜𝚎𝚗𝚝👉 ᴍᴏᴠɪᴇ ɴᴀᴍᴇ & yᴇᴀʀ")
+            await asyncio.sleep(10)
+            await kk.delete()
+            try:
+                await message.delete()
+            except Exception as e:
+                print(e)
+                return
+        elif 2 < len(message.text) <= 3:
+            return await advantage_spell_chok(client, msg)
+        elif 3 < len(message.text) < 80:
             search = message.text
             files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
             if not files:
