@@ -73,7 +73,7 @@ async def pm_text(bot, message):
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
     if int(req) not in [query.from_user.id, 0]:
-        if [query.from_user.id, 0] not in ADMINS   
+        if [query.from_user.id, 0] not in ADMINS:  
             return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
         offset = int(offset)
