@@ -72,7 +72,7 @@ async def pm_text(bot, message):
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
-    if int(req) not in [query.from_user.id, 0]:
+    if int(req) not in [query.from_user.id, 0] or int(req) not in ADMINS:
         return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
         offset = int(offset)
@@ -96,12 +96,12 @@ async def next_page(bot, query):
         oam = f"{random.choice(RAT)}"
         oamm = f"{random.choice(RAT)}"
         btn = []
-            for file in files:
-                sz = get_size(file.file_size)
-                tt = file.file_name[0:30].title().lstrip()
-                fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
-                filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
-                btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'files#{file.file_id}')])
+        for file in files:
+            sz = get_size(file.file_size)
+            tt = file.file_name[0:30].title().lstrip()
+            fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
+            filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
+            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'files#{file.file_id}')])
     else:
         btn = [
             [
