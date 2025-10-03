@@ -281,7 +281,7 @@ async def advantage_spoll_choker(bot, query):
                 [InlineKeyboardButton(text="ᴍᴀʟ", callback_data="instr_mal"), InlineKeyboardButton(text="ᴛᴀᴍ", callback_data="instr_tam"), InlineKeyboardButton(text="ʜɪɴ", callback_data="instr_hin"), InlineKeyboardButton(text="ᴇɴɢ", callback_data="instr_eng")]
             )
             kuttons.append(
-                [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="close_data")]
+                [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
             )
             reply_markup = InlineKeyboardMarkup(kuttons)
             if not query.from_user:
@@ -499,15 +499,17 @@ async def cb_handler(client: Client, query: CallbackQuery):
             alert = alerts[int(i)]
             alert = alert.replace("\\n", "\n").replace("\\t", "\t")
             await query.answer(alert, show_alert=True)
-    if query.data.startswith("file"):
-        clicked = query.from_user.id
-        if clicked in ADMINS: 
+    
+    clicked = query.from_user.id
+    if clicked in ADMINS: 
+        typed = query.from_user.id
+    else:
+        try:
+            typed = query.message.reply_to_message.from_user.id
+        except:
             typed = query.from_user.id
-        else:
-            try:
-                typed = query.message.reply_to_message.from_user.id
-            except:
-                typed = query.from_user.id
+            
+    if query.data.startswith("file"):      
         ident, file_id = query.data.split("#")
         files_ = await get_file_details(file_id)
         if not files_:
@@ -566,6 +568,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
     elif query.data.startswith("instr"):
         ident, lang = query.data.split("_")
+        if clicked != typed:
+            await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
         try:
             message = query.message.reply_to_message
         except:
@@ -579,6 +583,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await asyncio.sleep(.3)
             await query.answer("Once this movie is releas HDRip/OTT, it will be upload on the👇 💒channel \n\n\n ഈ സിനിമയുടെ HD/OTT ഇറങ്ങിയാൽ ഉടൻ ചുവടെ ഉള്ള 💒ചാനലിൽ അപ്‌ലോഡ് ചെയ്യുന്നതാണ്",show_alert=True)
             return
+        if lang  == "close":
+            await query.delete()
+            try:
+                await message.delete()
+            except:
+                return
         x = message.text.split()
         hari = "+".join(x)
         kuttons = []
@@ -605,9 +615,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             return
     elif query.data.startswith("report"):
+        if clicked != typed:
+            await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
         if query.message.reply_to_message:
             try:
-                await client.send_message(chat_id=LOG_CHANNEL,text=f"{query.message.reply_to_message}", disable_web_page_preview=True)
+                await client.send_message(chat_id=LOG_CHANNEL,text=f"{query.message.reply_to_message.text}", disable_web_page_preview=True)
             except:
                 await query.answer("𝚂𝚄𝙲𝙲𝙴𝚂𝚂𝙵𝚄𝙻𝙻𝚈 Reported to Admins 👮‍♂",show_alert=True)
             else:
