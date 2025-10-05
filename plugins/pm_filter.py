@@ -73,7 +73,8 @@ async def pm_text(bot, message):
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
     if int(req) not in [query.from_user.id, 0]:
-        if [query.from_user.id, 0] not in ADMINS:  
+        userid = query.from_user.id if query.from_user else None
+        if int(userid) not in ADMINS:  
             return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
         offset = int(offset)
@@ -656,7 +657,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             protect_content=True if ident == 'checksubp' else False
         )
     elif query.data == "pages":
-        await query.answer("👀 ʟᴏᴏᴋ ᴀᴛ ɴᴇxᴛ ᴘᴀɢᴇ 🤓)
+        await query.answer("👀 ʟᴏᴏᴋ ᴀᴛ ɴᴇxᴛ ᴘᴀɢᴇ 🤓")
     elif query.data.startswith("opnsetgrp"):
         ident, grp_id = query.data.split("#")
         userid = query.from_user.id if query.from_user else None
@@ -1205,7 +1206,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             parse_mode=enums.ParseMode.HTML
         )
     elif query.data == "owner_info":
-            return await query.answer(script.OWNER_INFO)
+            return await query.answer(f"{script.OWNER_INFO}")
                 
     elif query.data.startswith("setgs"):
         ident, set_type, status, grp_id = query.data.split("#")
