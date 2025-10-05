@@ -84,7 +84,6 @@ async def next_page(bot, query):
     if not search:
         await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
         return
-    await query.answer("𝚙𝚛𝚘𝚌𝚎𝚜𝚜𝚒𝚗𝚐........") 
     files, n_offset, total = await get_search_results(query.message.chat.id, search, offset=offset, filter=True)
     try:
         n_offset = int(n_offset)
@@ -575,6 +574,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, lang = query.data.split("_")
         if clicked != typed:
             await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+        if lang  == "close":
+            await query.message.delete()
+            try:
+                await query.message.reply_to_message.delete()
+            except:
+                await query.answer("👀")
+            return
         try:
             message = query.message.reply_to_message
         except:
@@ -588,12 +594,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await asyncio.sleep(.3)
             await query.answer("Once this movie is releas HDRip/OTT, it will be upload on the👇 💒channel \n\n\n ഈ സിനിമയുടെ HD/OTT ഇറങ്ങിയാൽ ഉടൻ ചുവടെ ഉള്ള 💒ചാനലിൽ അപ്‌ലോഡ് ചെയ്യുന്നതാണ്",show_alert=True)
             return
-        if lang  == "close":
-            await query.delete()
-            try:
-                await message.delete()
-            except:
-                return
+        
         x = message.text.split()
         hari = "+".join(x)
         kuttons = []
