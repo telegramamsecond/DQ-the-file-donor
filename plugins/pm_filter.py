@@ -4,10 +4,12 @@ import re
 import ast
 import math
 import random
+import time
 
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
 import pyrogram
+from asyncio.exceptions import TimeoutError
 from database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, \
     make_inactive
 from info import ADMINS, AUTH_CHANNEL, AUTH_USERS, SUPPORT_CHAT_ID, CUSTOM_FILE_CAPTION, MSG_ALRT, PICS, AUTH_GROUPS, P_TTI_SHOW_OFF, GRP_LNK, CHNL_LNK, NOR_IMG, LOG_CHANNEL, SPELL_IMG, MAX_B_TN, IMDB, \
@@ -1100,13 +1102,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data.startswith("dcode"):
         ident, scn = query.data.split("_")
+        if scn  == "film":
+            a = "Just sent me the movie not available in the bot \n\n nb:❗Don't ask movies that are not released in OTT platforms" 
+        elif scn == "file":
+            a = "Just sent me the file id that facing any issue"
+        elif scn == "grup":
+            a = "just sent the group/bot name"
+        else scn == "othr":
+            a = "ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴏᴛʜᴇʀ ɪꜱꜱᴜᴇꜱ"
         while True:
             try:
-                nx = await client.ask(text="__ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ɪꜱꜱᴜᴇ", chat_id=query.message.from_user.id, filters=filters.text, timeout=30)
+                nx = await client.ask(text="{a}", chat_id=query.from_user.id, filters=filters.text, timeout=30)
             except TimeoutError:
                 await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ** __ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ ♻️")
                 return 
-            if not query.message.from_user.id != nx.from_user.id:
+            if not query.from_user.id != nx.from_user.id:
                 await query.message.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
                 await asyncio.sleep(.8)
                 continue
