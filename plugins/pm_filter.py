@@ -1108,7 +1108,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             a = "Just sent me the file id that facing any issue"
         elif scn == "grup":
             a = "just sent the group/bot name"
-        else scn == "othr":
+        elif scn == "othr":
             a = "ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴏᴛʜᴇʀ ɪꜱꜱᴜᴇꜱ"
         while True:
             try:
