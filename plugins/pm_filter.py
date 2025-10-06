@@ -1112,11 +1112,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
             a = "ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴏᴛʜᴇʀ ɪꜱꜱᴜᴇꜱ"
         while True:
             try:
-                nx = await client.ask(text="{a}", chat_id=query.from_user.id, filters=filters.text, timeout=30)
+                nx = await client.ask(text=f"{a}", chat_id=query.from_user.id, filters=filters.text, timeout=30)
             except TimeoutError:
                 await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ** __ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ ♻️")
                 return 
-            if not query.from_user.id != nx.from_user.id:
+            if query.from_user.id != nx.from_user.id:
                 await query.message.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
                 await asyncio.sleep(.8)
                 continue
