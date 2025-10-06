@@ -1113,10 +1113,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if man != nx.from_user.id:
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
-        await nx.reply_to_message.edit_text(
-            text="𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊",
-            parse_mode=enums.ParseMode.HTML
-        )
+        await await nx.reply("𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊")
         await nx.forward(LOG_CHANNEL)
         # await client.send_message(chat_id=LOG_CHANNEL,text=f"report ⛑️ \n\n {nx.text}", disable_web_page_preview=True)
         return 
