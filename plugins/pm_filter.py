@@ -32,7 +32,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
-MYRE = ["CAADBQAD2AMAAvjDaFSsTHfTpJDaShYE", "CAADBQADDQMAAtC6kVRSm-hyq9LjMRYE", "CAADBQADowEAAsuvXSk7LlkDJBYrnRYE", "CAADBQADAQcAAljMOFdOolwetNErQxYE", "CAADBQADeAMAArLJgFRXeMmuvdTQchYE", "CAADBQADsAMAAgYG8VSFaQgU6X596BYE", "CAADBQAD6AMAAi8MwVS1_PRa7JTUWxYE", "CAADBQADOgIAAnRfsFRgDjrWSQK3kxYE", "CAADBQADRAQAAlaVaVSKDdtGH1UJKhYE", ]
+MYRE = ["CAADBQAD2AMAAvjDaFSsTHfTpJDaShYE", "CAACAgUAAyEFAASbXix3AAPvaON_uhWTWNjvKUG715WbMrFBCMMAAmEDAALutVlWDVTw_ueui9YeBA", "CAACAgUAAyEFAASbXix3AAPsaON_pO3qu4TrOL_4mkKbSdnQQoMAAkoLAAKD1lhUGp0Vhdd8A0UeBA", "CAACAgUAAyEFAASbXix3AAPbaON_IXVmPTbJ4u5sUvDzr3zxhR8AAlsNAAIxkVlUUD-nRyfRZoAeBA", "CAACAgUAAyEFAASbXix3AAPdaON_JchnDRUzsJasPq8ub3wvrn4AAjsKAAIDYllU5m3DiHYZdg8eBA", "CAACAgUAAyEFAASbXix3AAPeaON_NF3iECQZ6QV4V4IFPVURP0EAAoYLAAKJyVhUSmI-aQQUsbAeBA", "CAACAgUAAyEFAASbXix3AAPgaON_Rg-yZEMwddIJGut7t0ut1x4AArwJAALUlllUK4QSuWIpAAE0HgQ", "CAACAgUAAyEFAASbXix3AAPhaON_U4dhoTqnV9sN9KC4vEuxNPwAAlkLAALsflhUhi4MtxorquYeBA", "CAADBQADDQMAAtC6kVRSm-hyq9LjMRYE", "CAADBQADowEAAsuvXSk7LlkDJBYrnRYE", "CAADBQADAQcAAljMOFdOolwetNErQxYE", "CAADBQADeAMAArLJgFRXeMmuvdTQchYE", "CAADBQADsAMAAgYG8VSFaQgU6X596BYE", "CAADBQAD6AMAAi8MwVS1_PRa7JTUWxYE", "CAADBQADOgIAAnRfsFRgDjrWSQK3kxYE", "CAADBQADRAQAAlaVaVSKDdtGH1UJKhYE", ]
 
 BUTTONS = {}
 SPELL_CHECK = {}
@@ -962,10 +962,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ]
             ]
         try:
-            await query.message.edit_text(
-                text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
-                reply_markup=reply_mmarkup,
-                parse_mode=enums.ParseMode.HTML
+            await client.edit_message_media(
+            query.message.chat.id, 
+            query.message.id, 
+            InputMediaPhoto(random.choice(PICS))
             )
         except:
             a = await query.message.reply_text(
@@ -975,6 +975,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
             parse_mode=enums.ParseMode.HTML)
             await query.message.delete()
         else:
+            await query.message.edit_text(
+                text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+                reply_markup=reply_mmarkup,
+                parse_mode=enums.ParseMode.HTML
+            )
             await query.answer(MSG_ALRT)
             
             
