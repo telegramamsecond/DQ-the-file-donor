@@ -13,7 +13,7 @@ from database.connections_mdb import active_connection, all_connections, delete_
     make_inactive
 from info import ADMINS, AUTH_CHANNEL, AUTH_USERS, SUPPORT_CHAT_ID, CUSTOM_FILE_CAPTION, MSG_ALRT, PICS, AUTH_GROUPS, P_TTI_SHOW_OFF, GRP_LNK, CHNL_LNK, NOR_IMG, LOG_CHANNEL, SPELL_IMG, MAX_B_TN, IMDB, \
     SINGLE_BUTTON, SPELL_CHECK_REPLY, IMDB_TEMPLATE, NO_RESULTS_MSG, INMAL, INTAM, INHIN, INENG
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ForceReply, CallbackQuery, InputMediaPhoto
 from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid, ListenerTimeout
 from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings
@@ -1105,18 +1105,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
             a = "ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴏᴛʜᴇʀ ɪꜱꜱᴜᴇꜱ"
         man = query.from_user.id
         await query.message.delete()
-        while True:
-            try:
-                nx = await client.ask(text=f"**{a}**", chat_id=man, timeout=30, reply_markup=ForceReply(placeholder="type issue"))
-            except ListenerTimeout:
-                await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️")
-                return 
-            if query.from_user.id != nx.from_user.id:
-                await query.message.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
-                await asyncio.sleep(.8)
-                continue
-            else:
-                break
+        try:
+            nx = await client.ask(text=f"**{a}**", chat_id=man, timeout=30, reply_markup=ForceReply(placeholder="type issue"))
+        except ListenerTimeout:
+            await client.send_message(chat_id=man, text=f"**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️", disable_web_page_preview=True)
+            return     
+        if man != nx.from_user.id:
+            await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
+            return
         await nx.reply_to_message.edit_text(
             text="𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊",
             parse_mode=enums.ParseMode.HTML
