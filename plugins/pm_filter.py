@@ -43,20 +43,9 @@ PHOTT = ["https://telegra.ph/file/9075ca7cbad944afaa823.jpg", "https://telegra.p
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
-    if message.chat.id != SUPPORT_CHAT_ID:
-        await global_filters(client, message)
     manual = await manual_filters(client, message)
     if manual == False:
-        settings = await get_settings(message.chat.id)
-        try:
-            if settings['auto_ffilter']:
-                await auto_filter(client, message)
-        except KeyError:
-            grpid = await active_connection(str(message.from_user.id))
-            await save_group_settings(grpid, 'auto_ffilter', True)
-            settings = await get_settings(message.chat.id)
-            if settings['auto_ffilter']:
-                await auto_filter(client, message) 
+        await auto_filter(client, message)
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def pm_text(bot, message):
@@ -576,6 +565,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, lang = query.data.split("_")
         if clicked != typed:
             await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+            return
         if lang  == "close":
             await query.message.delete()
             try:
@@ -625,6 +615,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data.startswith("report"):
         if clicked != typed:
             await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+            return
         if query.message.reply_to_message:
             try:
                 await client.send_message(chat_id=LOG_CHANNEL,text=f"{query.message.reply_to_message.text}", disable_web_page_preview=True)
@@ -1092,6 +1083,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton('ʙᴏᴛ/ɢʀᴏᴜᴩ ʙʟᴏᴄᴋ ɪꜱꜱᴜᴇ', callback_data='dcode_grup')
         ],[
             InlineKeyboardButton('ᴏᴛʜᴇʀ..', callback_data='dcode_othr')
+        ],[
+            InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'),
+            InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.edit_text(
@@ -1109,21 +1103,26 @@ async def cb_handler(client: Client, query: CallbackQuery):
             a = "just sent the group/bot name"
         elif scn == "othr":
             a = "ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴏᴛʜᴇʀ ɪꜱꜱᴜᴇꜱ"
+        man = query.from_user.id
+        await query.message.delete()
         while True:
             try:
-                nx = await client.ask(text=f"{a}", chat_id=query.from_user.id, filters=filters.text, timeout=30)
+                nx = await client.ask(text=f"**{a}**", chat_id=man, timeout=30, reply_markup=ForceReply(placeholder="type issue"))
             except ListenerTimeout:
-                await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ** __ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ __♻️")
+                await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️")
                 return 
             if query.from_user.id != nx.from_user.id:
                 await query.message.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
                 await asyncio.sleep(.8)
                 continue
             else:
-                await nx.reply_to_message.delete()
                 break
-        await query.message.delete()
-        await client.send_message(chat_id=LOG_CHANNEL,text=f"report ⛑️ \n\n {nx.text}", disable_web_page_preview=True)
+        await nx.reply_to_message.edit_text(
+            text="𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊",
+            parse_mode=enums.ParseMode.HTML
+        )
+        await nx.forward(LOG_CHANNEL)
+        # await client.send_message(chat_id=LOG_CHANNEL,text=f"report ⛑️ \n\n {nx.text}", disable_web_page_preview=True)
         return 
     elif query.data == "stiker":
         pari = await query.message.edit_text(
@@ -1356,8 +1355,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ]
             reply_markup = InlineKeyboardMarkup(buttons)
             await query.message.edit_reply_markup(reply_markup)
-    await query.answer(MSG_ALRT)
-
+    
     
 async def auto_filter(client, msg, spoll=False):
     reqstr1 = msg.from_user.id if msg.from_user else 0
