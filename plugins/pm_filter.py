@@ -4,12 +4,13 @@ import re
 import ast
 import math
 import random
-import time
+import timetime
+from pyromod import ListenerTimeout
+
 
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 from Script import script
 import pyrogram
-from asyncio.exceptions import TimeoutError
 from database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, \
     make_inactive
 from info import ADMINS, AUTH_CHANNEL, AUTH_USERS, SUPPORT_CHAT_ID, CUSTOM_FILE_CAPTION, MSG_ALRT, PICS, AUTH_GROUPS, P_TTI_SHOW_OFF, GRP_LNK, CHNL_LNK, NOR_IMG, LOG_CHANNEL, SPELL_IMG, MAX_B_TN, IMDB, \
@@ -1113,8 +1114,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         while True:
             try:
                 nx = await client.ask(text=f"{a}", chat_id=query.from_user.id, filters=filters.text, timeout=30)
-            except TimeoutError:
-                await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ** __ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ ♻️")
+            except ListenerTimeout:
+                await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ** __ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ __♻️")
                 return 
             if query.from_user.id != nx.from_user.id:
                 await query.message.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
@@ -1123,6 +1124,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             else:
                 await nx.reply_to_message.delete()
                 break
+        await query.message.delete()
         await client.send_message(chat_id=LOG_CHANNEL,text=f"report ⛑️ \n\n {nx.text}", disable_web_page_preview=True)
         return 
     elif query.data == "stiker":
