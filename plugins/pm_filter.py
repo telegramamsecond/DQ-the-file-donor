@@ -32,6 +32,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
+MYRE = ["CAADBQAD2AMAAvjDaFSsTHfTpJDaShYE", "CAADBQADDQMAAtC6kVRSm-hyq9LjMRYE", "CAADBQADowEAAsuvXSk7LlkDJBYrnRYE", "CAADBQADAQcAAljMOFdOolwetNErQxYE", "CAADBQADeAMAArLJgFRXeMmuvdTQchYE", "CAADBQADsAMAAgYG8VSFaQgU6X596BYE", "CAADBQAD6AMAAi8MwVS1_PRa7JTUWxYE", "CAADBQADOgIAAnRfsFRgDjrWSQK3kxYE", "CAADBQADRAQAAlaVaVSKDdtGH1UJKhYE", ]
 
 BUTTONS = {}
 SPELL_CHECK = {}
@@ -946,18 +947,37 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton("ɢʀᴏᴜᴩ 2 🎪", url="https://t.me/+eDjzTT2Ua6kwMTI1")                  
                   ]]
         
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(random.choice(PICS))
-        )
-        await query.message.edit_text(
+        reply_mmarkup = InlineKeyboardMarkup(buttons)
+        byttons = [
+            [
+                InlineKeyboardButton(text="ᴀʙᴏᴜᴛ 💡",callback_data="about"),
+                InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🍿", url="https://t.me/+R9zxAI4mCkk0NzVl")   
+            ],
+            [
+                InlineKeyboardButton("ɢʀᴏᴜᴩ 1 🎪", url="https://t.me/+PBGW_EV3ldY5YjJl"),
+                InlineKeyboardButton("ɢʀᴏᴜᴩ 2 🎪", url="https://t.me/+eDjzTT2Ua6kwMTI1")   
+            ],
+            [
+                InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url="http://t.me/{temp.U_NAME}?startgroup=true")   
+            ]
+            ]
+        try:
+            await query.message.edit_text(
+                text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+                reply_markup=reply_mmarkup,
+                parse_mode=enums.ParseMode.HTML
+            )
+        except:
+            a = await query.message.reply_text(
             text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-        await query.answer(MSG_ALRT)
+            reply_markup=InlineKeyboardMarkup(byttons),
+            disable_web_page_preview=True,
+            parse_mode=enums.ParseMode.HTML)
+            await query.message.delete()
+        else:
+            await query.answer(MSG_ALRT)
+            
+            
 
     elif query.data == "filters":
         buttons = [[
@@ -1021,17 +1041,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "about":
         buttons = [[
-            InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=GRP_LNK),
+            InlineKeyboardButton('𝚒𝚗𝚏𝚘 🛟', callback_data='owner_info'),
             InlineKeyboardButton('Sᴏᴜʀᴄᴇ Cᴏᴅᴇ', callback_data='source')
         ],[
-            InlineKeyboardButton('Hᴏᴍᴇ', callback_data='start'),
-            InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close_data')
+            InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'),
+            InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')
         ]]
-        await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(random.choice(PICS))
-        )
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.edit_text(
             text=script.ABOUT_TXT.format(temp.B_NAME),
@@ -1040,19 +1055,24 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "source":
         buttons = [[
-            InlineKeyboardButton('⟸ Bᴀᴄᴋ', callback_data='about')
+            InlineKeyboardButton('𝐍𝐎', callback_data='about'),
+            InlineKeyboardButton('𝐘𝐄𝐒', callback_data='stiker')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(random.choice(PICS))
-        )
         await query.message.edit_text(
-            text=script.SOURCE_TXT,
+            text="Do you want it?",
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
+    elif query.data == "stiker":
+        pari = await query.message.edit_text(
+            text="𝐏𝐥𝐳 𝐰𝐚𝐢𝐭 𝐬𝐞𝐧𝐝𝐢𝐧𝐠.....",
+            parse_mode=enums.ParseMode.HTML
+        )
+        await pari.delete()
+        await asyncio.sleep(1) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
+        await message.reply_sticker(sticker=f"{random.choice(MYRE)}")
+        
     elif query.data == "manuelfilter":
         buttons = [[
             InlineKeyboardButton('⟸ Bᴀᴄᴋ', callback_data='filters'),
