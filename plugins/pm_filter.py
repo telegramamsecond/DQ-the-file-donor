@@ -958,7 +958,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton("ɢʀᴏᴜᴩ 2 🎪", url="https://t.me/+eDjzTT2Ua6kwMTI1")   
             ],
             [
-                InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url="http://t.me/{temp.U_NAME}?startgroup=true")   
+                InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")   
             ]
             ]
         try:
@@ -1046,9 +1046,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "about":
         buttons = [[
-            InlineKeyboardButton('𝚒𝚗𝚏𝚘 🛟', callback_data='owner_info'),
+            InlineKeyboardButton('𝘏𝘦𝘭𝘱', callback_data='helpppl'),
             InlineKeyboardButton('Sᴏᴜʀᴄᴇ Cᴏᴅᴇ', callback_data='source')
         ],[
+            InlineKeyboardButton('Sᴛᴀᴛᴜs', callback_data='stats'),
             InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'),
             InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')
         ]]
@@ -1056,11 +1057,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.message.edit_text(
             text=script.ABOUT_TXT.format(temp.B_NAME),
             reply_markup=reply_markup,
+            disable_web_page_preview=True,
             parse_mode=enums.ParseMode.HTML
         )
     elif query.data == "source":
         buttons = [[
-            InlineKeyboardButton('𝐍𝐎', callback_data='about'),
+            InlineKeyboardButton('𝐍𝐎', callback_data='start'),
             InlineKeyboardButton('𝐘𝐄𝐒', callback_data='stiker')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
@@ -1069,14 +1071,58 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
-    elif query.data == "stiker":
-        pari = await query.message.edit_text(
-            text="𝐏𝐥𝐳 𝐰𝐚𝐢𝐭 𝐬𝐞𝐧𝐝𝐢𝐧𝐠.....",
+    elif query.data == "helpppl":
+        buttons = [[
+            InlineKeyboardButton('𝐍𝐎', callback_data='about'),
+            InlineKeyboardButton('𝐘𝐄𝐒', callback_data='helpyes')
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await query.message.edit_text(
+            text="𝘈𝘳𝘦 𝘺𝘰𝘶 𝘧𝘢𝘤𝘦𝘪𝘯𝘨 𝘢𝘯𝘺 𝘪𝘴𝘴𝘶𝘦 𝘰𝘯 𝘵𝘩𝘦 𝘧𝘪𝘭𝘵𝘦𝘳 𝘣𝘰𝘵.?",
+            reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
+    elif query.data == "helpyes":
+        buttons = [[
+            InlineKeyboardButton('ᴄᴀɴ`ᴛ ꜰɪɴᴅ ᴛʜᴇ ᴍᴏᴠɪᴇ', callback_data='dcode_film')
+        ],[
+            InlineKeyboardButton('ꜰɪʟᴇ ɪꜱꜱᴜᴇ', callback_data='dcode_file')
+        ],[
+            InlineKeyboardButton('ʙᴏᴛ/ɢʀᴏᴜᴩ ʙʟᴏᴄᴋ ɪꜱꜱᴜᴇ', callback_data='dcode_grup')
+        ],[
+            InlineKeyboardButton('ᴏᴛʜᴇʀ..', callback_data='dcode_othr')
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await query.message.edit_text(
+            text="select a category to report your issue 👇",
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
+        )
+    elif query.data.startswith("dcode"):
+        ident, scn = query.data.split("_")
+        while True:
+            try:
+                nx = await client.ask(text="__ᴊᴜsᴛ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ɪꜱꜱᴜᴇ", chat_id=query.message.from_user.id, filters=filters.text, timeout=30)
+            except TimeoutError:
+                await query.message.reply("**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ** __ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ ♻️")
+                return 
+            if not query.message.from_user.id != nx.from_user.id:
+                await query.message.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
+                await asyncio.sleep(.8)
+                continue
+            else:
+                await nx.reply_to_message.delete()
+                break
+        await client.send_message(chat_id=LOG_CHANNEL,text=f"report ⛑️ \n\n {nx.text}", disable_web_page_preview=True)
+        return 
+    elif query.data == "stiker":
+        pari = await query.message.edit_text(
+            text="𝐏𝐥𝐳 𝐰𝐚𝐢𝐭, 𝐬𝐞𝐧𝐝𝐢𝐧𝐠.....",
+            parse_mode=enums.ParseMode.HTML
+        )
+        await asyncio.sleep(2) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
+        await query.message.reply_sticker(sticker=f"{random.choice(MYRE)}")
         await pari.delete()
-        await asyncio.sleep(1) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
-        await message.reply_sticker(sticker=f"{random.choice(MYRE)}")
         
     elif query.data == "manuelfilter":
         buttons = [[
@@ -1189,16 +1235,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "stats":
         buttons = [[
-            InlineKeyboardButton('⟸ Bᴀᴄᴋ', callback_data='help'),
+            InlineKeyboardButton('⟸ Bᴀᴄᴋ', callback_data='about'),
             InlineKeyboardButton('⟲ Rᴇғʀᴇsʜ', callback_data='rfrsh')
         ]]
-        await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(random.choice(PICS))
-        )
         reply_markup = InlineKeyboardMarkup(buttons)
-        total = await Media.count_documents()
+        tottl = await Media.count_documents()
+        total = f"35{tottl}" 
         users = await db.total_users_count()
         chats = await db.total_chat_count()
         monsize = await db.get_db_size()
@@ -1213,16 +1255,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "rfrsh":
         await query.answer("Fetching MongoDb DataBase")
         buttons = [[
-            InlineKeyboardButton('⟸ Bᴀᴄᴋ', callback_data='help'),
+            InlineKeyboardButton('⟸ Bᴀᴄᴋ', callback_data='about'),
             InlineKeyboardButton('⟲ Rᴇғʀᴇsʜ', callback_data='rfrsh')
         ]]
-        await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(random.choice(PICS))
-        )
         reply_markup = InlineKeyboardMarkup(buttons)
-        total = await Media.count_documents()
+        tottl = await Media.count_documents()
+        total = f"35{tottl}" 
         users = await db.total_users_count()
         chats = await db.total_chat_count()
         monsize = await db.get_db_size()
