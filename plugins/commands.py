@@ -17,6 +17,8 @@ import base64
 logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
+HI = ["CAADAgADVBYAAtB7QUn8uVjZ80ZWKBYE", "CAADAgADjhUAAiVNwUmPFk1-69E28xYE", "CAADAgADbBkAArFrGEl6sWLRwfR3mhYE", "CAADAgADqBYAAsaGIEonqRtNuY60VRYE", "CAADAgADKRUAAiLQKEqf0KMMiyjVPBYE", "CAADAgADhxUAAj0PUEnem2b91sejvxYE", "CAADAgADCh0AAsGoIEkIjTf-YvDReBYE", "CAADAgADmxcAAgN6kEkVW672usFGgxYE", "CAADAgADoAADlp-MDmce7YYzVgABVRYE", "CAADAgADsQADwZxgDIoe_kMAAUM8AhYE", "CAADAgADuAAD9wLID0YLnLTiTgs4FgQ", "CAADAgAD0wIAAvPjvguBRPfRdizrsRYE", "CAADAgADbwADwZxgDMsOfYvA3U1WFgQ", "CAADAgAD_gADMNSdERxr3cDCcFZUFgQ", "CAADAgADbgUAAj-VzAqGOtldiLy3NRYE", ]
+MYRE = ["CAADBQAD2AMAAvjDaFSsTHfTpJDaShYE", "CAADBQADDQMAAtC6kVRSm-hyq9LjMRYE", "CAADBQADowEAAsuvXSk7LlkDJBYrnRYE", "CAADBQADAQcAAljMOFdOolwetNErQxYE", "CAADBQADeAMAArLJgFRXeMmuvdTQchYE", "CAADBQADsAMAAgYG8VSFaQgU6X596BYE", "CAADBQAD6AMAAi8MwVS1_PRa7JTUWxYE", "CAADBQADOgIAAnRfsFRgDjrWSQK3kxYE", "CAADBQADRAQAAlaVaVSKDdtGH1UJKhYE", ]
 
 @Client.on_message(filters.regex('Livegram') & filters.private)
 async def dfhhg(client, message):
@@ -24,12 +26,9 @@ async def dfhhg(client, message):
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
-        buttons = [[
-                    InlineKeyboardButton('ꜱᴛᴀʀᴛ', callback_data='start'),
-                  ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply(script.START_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup)
-        await asyncio.sleep(2) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
+        pari = await message.reply_sticker(sticker=f"{random.choice(MYRE)}")
+        await asyncio.sleep(4) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
+        await pari.delete()
         if not await db.get_chat(message.chat.id):
             total=await client.get_chat_members_count(message.chat.id)
             await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, "Unknown"))       
@@ -39,7 +38,7 @@ async def start(client, message):
         await db.add_user(message.from_user.id, message.from_user.first_name)
         # await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
-        buttons = [[
+        """buttons = [[
                     InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
                     InlineKeyboardButton('♚ Bᴏᴛ Oᴡɴᴇʀ', callback_data="owner_info"),
@@ -48,13 +47,9 @@ async def start(client, message):
                 ],[
                     InlineKeyboardButton('Iɴʟɪɴᴇ Sᴇᴀʀᴄʜ', switch_inline_query_current_chat='')
                   ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply_photo(
-            photo=random.choice(PICS),
-            caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
+        reply_markup = InlineKeyboardMarkup(buttons)"""
+        await message.reply_sticker(sticker=f"{random.choice(HI)}", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="ꜱᴛᴀʀᴛ",callback_data="start")]]))
+        await message.delete()
         return
     if AUTH_CHANNEL and not await is_subscribed(client, message):
         try:
@@ -88,7 +83,7 @@ async def start(client, message):
         buttons = [[
                     InlineKeyboardButton('⤬ Aᴅᴅ Mᴇ Tᴏ Yᴏᴜʀ Gʀᴏᴜᴘ ⤬', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
                 ],[
-                    InlineKeyboardButton('Bᴏᴛ Oᴡɴᴇʀ', callback_data="owner_info"),
+                    InlineKeyboardButton('Bᴏᴛ', callback_data="owner_info"),
                     InlineKeyboardButton('Gʀᴏᴜᴘ', url=GRP_LNK)
                 ],[
                     InlineKeyboardButton('Iɴʟɪɴᴇ Sᴇᴀʀᴄʜ', switch_inline_query_current_chat='')
