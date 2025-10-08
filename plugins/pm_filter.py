@@ -510,7 +510,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not files_:
             return await query.answer('Nᴏ sᴜᴄʜ ғɪʟᴇ ᴇxɪsᴛ.')
         files = files_[0]
-        title = files.file_name
+        title = re.sub(r"(#|\@|\~|\©|\[|\]|\_|\.)", " ", files.file_name, flags=re.IGNORECASE)
         target_emoji = "🔞"
         if target_emoji in title:
             ident = "filep"
@@ -937,6 +937,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         byttons = [
             [
                 InlineKeyboardButton(text="ᴀʙᴏᴜᴛ 💡",callback_data="about"),
+                InlineKeyboardButton(text="ʜᴇʟᴩ ⛑️",callback_data="helpppl")
+            ],
+            [
                 InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🍿", url="https://t.me/+R9zxAI4mCkk0NzVl")   
             ],
             [
@@ -947,26 +950,33 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")   
             ]
             ]
-        try:
-            await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(random.choice(PICS))
-            )
-        except:
+        if message.text:
+            try:
+                await client.edit_message_media(
+                    query.message.chat.id, 
+                    query.message.id, 
+                    InputMediaPhoto(random.choice(PICS)))
+            except:
+                await query.message.edit_text(
+                    text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+                    reply_markup=InlineKeyboardMarkup(byttons),
+                    disable_web_page_preview=True,
+                    parse_mode=enums.ParseMode.HTML)
+                return
+            else:
+                await query.message.edit_text(
+                    text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+                    reply_markup=reply_mmarkup,
+                    parse_mode=enums.ParseMode.HTML)
+                await query.answer(MSG_ALRT)
+        else: 
             a = await query.message.reply_text(
             text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
             reply_markup=InlineKeyboardMarkup(byttons),
             disable_web_page_preview=True,
             parse_mode=enums.ParseMode.HTML)
             await query.message.delete()
-        else:
-            await query.message.edit_text(
-                text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
-                reply_markup=reply_mmarkup,
-                parse_mode=enums.ParseMode.HTML
-            )
-            await query.answer(MSG_ALRT)
+        
             
             
 
@@ -1032,10 +1042,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "about":
         buttons = [[
-            InlineKeyboardButton('𝘏𝘦𝘭𝘱', callback_data='helpppl'),
+            InlineKeyboardButton('Sᴛᴀᴛᴜs', callback_data='stats'),
             InlineKeyboardButton('Sᴏᴜʀᴄᴇ Cᴏᴅᴇ', callback_data='source')
         ],[
-            InlineKeyboardButton('Sᴛᴀᴛᴜs', callback_data='stats'),
             InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'),
             InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')
         ]]
@@ -1059,7 +1068,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "helpppl":
         buttons = [[
-            InlineKeyboardButton('𝐍𝐎', callback_data='about'),
+            InlineKeyboardButton('𝐍𝐎', callback_data='start'),
             InlineKeyboardButton('𝐘𝐄𝐒', callback_data='helpyes')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
@@ -1119,7 +1128,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             parse_mode=enums.ParseMode.HTML
         )
         await asyncio.sleep(2) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
-        await query.message.reply_sticker(sticker=f"{random.choice(MYRE)}")
+        await query.message.reply_sticker(sticker=f"{random.choice(MYRE)}", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="ꜱᴛᴀʀᴛ",callback_data="start")]]))
         await pari.delete()
         
     elif query.data == "manuelfilter":
