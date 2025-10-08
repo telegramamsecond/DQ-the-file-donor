@@ -61,7 +61,7 @@ async def give_filter(client, message):
         else:
             fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
             files, offset, total_results = await get_search_results(message.chat.id, message.text.lower(), offset=0, filter=True)
-            if int(total_results) != int(nyva["total"]):
+            if total_results != nyva['total']:
                 BUT.pop("sesna")
             try:
                 if settings['auto_delete']:
