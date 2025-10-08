@@ -57,12 +57,12 @@ async def give_filter(client, message):
         try:
             btn = nyva['buttons']
         except:
-            BUT.pop("sesna")
+            BUT.pop(f"{sesna}")
         else:
             fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
             files, offset, total_results = await get_search_results(message.chat.id, search.lower(), offset=0, filter=True)
             if total_results != nyva['total']:
-                await BUT.pop("sesna")
+                await BUT.pop(f"{sesna}")
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
