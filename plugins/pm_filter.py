@@ -48,7 +48,7 @@ async def give_filter(client, message):
     x = search.split()
     sesna = "_".join(x)
     try:
-        nyva = BUTTONS[sesna]
+        nyva = BUT[sesna]
     except:
         pass
     else:
