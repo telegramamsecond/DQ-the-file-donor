@@ -45,8 +45,9 @@ PHOTT = ["https://telegra.ph/file/9075ca7cbad944afaa823.jpg", "https://telegra.p
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     search = message.text.strip()
-    x = search.split()
-    sesna = "_".join(x)
+    y = search.split()
+    x = "_".join(y)
+    sesna = x.lower()
     try:
         nyva = BUT[sesna]
     except:
@@ -59,6 +60,9 @@ async def give_filter(client, message):
             BUT.pop("sesna")
         else:
             fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            files, offset, total_results = await get_search_results(message.chat.id, message.text.lower(), offset=0, filter=True)
+            if int(total_results) != int(nyva["total"]):
+                BUT.pop("sesna")
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
@@ -95,10 +99,16 @@ async def pm_text(bot, message):
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
-    if int(req) not in [query.from_user.id, 0]:
-        userid = query.from_user.id if query.from_user else None
-        if int(userid) not in ADMINS:  
-            return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
+    clicked = query.from_user.id
+    if clicked in ADMINS: 
+        typed = query.from_user.id
+    else:
+        try:
+            typed = query.message.reply_to_message.from_user.id
+        except:
+            typed = query.from_user.id
+    if clicked != typed:
+        return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     try:
         offset = int(offset)
     except:
@@ -1523,8 +1533,9 @@ async def auto_filter(client, msg, spoll=False):
             [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
         )
     sch = search.strip()
-    x = sch.split()
-    sesna = "_".join(x)
+    y = sch.split()
+    x = "_".join(y)
+    sesna = x.lower()
     BUT[sesna] = {"total" : str(total_results), "buttons" : btn}
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
