@@ -61,6 +61,7 @@ async def give_filter(client, message):
                     await asyncio.sleep(600)
                     await fuk.delete()
                     await message.delete()
+                    return
             except KeyError:
                 grpid = await active_connection(str(message.from_user.id))
                 await save_group_settings(grpid, 'auto_delete', True)
@@ -69,6 +70,7 @@ async def give_filter(client, message):
                     await asyncio.sleep(600)
                     await fuk.delete()
                     await message.delete()
+                    return
     manual = await manual_filters(client, message)
     if manual == False:
         await auto_filter(client, message)
@@ -154,8 +156,7 @@ async def next_page(bot, query):
                 
     except KeyError:
         grpid = await active_connection(str(query.message.from_user.id))
-        await save_group_settingsadmins
-        , 'auto_delete', True)
+        await save_group_settings(grpid, 'auto_delete', True)
         settings = await get_settings(query.message.chat.id)
         if settings['auto_delete']:
             btn.insert(0, 
