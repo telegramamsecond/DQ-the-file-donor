@@ -49,7 +49,7 @@ async def give_filter(client, message):
     sesna = "_".join(x)
     nyva=BUT.get("sesna")
     if nyva:
-        cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+        cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
         try:
             btn = nyva['buttons']
         except:
@@ -1519,6 +1519,10 @@ async def auto_filter(client, msg, spoll=False):
         btn.append(
             [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
         )
+    sch = search.strip()
+    x = sch.split()
+    sesna = "_".join(x)
+    BUT[sesna] = {"total" : str(total_results), "buttons" : btn}
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
     if imdb:
@@ -1631,10 +1635,6 @@ async def auto_filter(client, msg, spoll=False):
                     await asyncio.sleep(600)
                     await fuk.delete()
                     await message.delete()
-    sch = search.strip()
-    x = sch.split()
-    sesna = "_".join(x)
-    BUT[sesna] = {"total" : str(total_results), "buttons" : btn}
     if spoll:
         await msg.message.delete()
 
