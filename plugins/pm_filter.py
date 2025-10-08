@@ -950,7 +950,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")   
             ]
             ]
-        if message.text:
+        if query.message.text:
             try:
                 await client.edit_message_media(
                     query.message.chat.id, 
