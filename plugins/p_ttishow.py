@@ -15,15 +15,10 @@ import asyncio
 async def save_group(bot, message):
     r_j_check = [u.id for u in message.new_chat_members]
     if temp.ME in r_j_check:
-        if not await db.get_chat(message.chat.id):
-            total=await bot.get_chat_members_count(message.chat.id)
-            r_j = message.from_user.mention if message.from_user else "Anonymous" 
-            await bot.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, r_j))       
-            await db.add_chat(message.chat.id, message.chat.title)
         if message.chat.id in temp.BANNED_CHATS:
             # Inspired from a boat of a banana tree
             buttons = [[
-                InlineKeyboardButton('Support', url=f'https://t.me/{SUPPORT_CHAT}')
+                InlineKeyboardButton('Support', url=GRP_LNK)
             ]]
             reply_markup=InlineKeyboardMarkup(buttons)
             k = await message.reply(
@@ -37,42 +32,25 @@ async def save_group(bot, message):
                 pass
             await bot.leave_chat(message.chat.id)
             return
-        buttons = [[
-                    InlineKeyboardButton('ᴍy ɢʀᴏᴜᴩ', url=GRP_LNK)
-                  ]]
-        reply_markup=InlineKeyboardMarkup(buttons)
-        await message.reply_text(
-            text=f"<b>Thankyou 🥰🤗 For Adding Me In {message.chat.title}❤️‍🔥\n\n ɪꜰ yᴏᴜ ᴡᴀɴᴛ ᴍᴏᴠɪᴇꜱ/ꜱᴇʀɪᴇꜱ, ᴀꜱᴋ ɪɴ ᴍy ɢʀᴏᴜᴩ 👇</b>",
-            reply_markup=reply_markup)
-    else:
-        settings = await get_settings(message.chat.id)
-        if settings["welcome"]:
-            for u in message.new_chat_members:
-                if (temp.MELCOW).get('welcome') is not None:
-                    try:
-                        await (temp.MELCOW['welcome']).delete()
-                    except:
-                        pass
-                temp.MELCOW['welcome'] = await message.reply_video(
-                                                 video=(MELCOW_VID),
-                                                 caption=(script.MELCOW_ENG.format(u.mention, message.chat.title)),
-                                                 reply_markup=InlineKeyboardMarkup(
-                                                                         [[
-                                                                           InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=GRP_LNK),
-                                                                           InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
-                                                                        ],[
-                                                                           InlineKeyboardButton("Bᴏᴛ Oᴡɴᴇʀ", url="t.me/creatorbeatz")
-                                                                         ]]
-                                                 ),
-                                                 parse_mode=enums.ParseMode.HTML
-                )
-                
-        if settings["auto_delete"]:
-            await asyncio.sleep(600)
-            await (temp.MELCOW['welcome']).delete()
-                
-               
-
+        if not await db.get_chat(message.chat.id):
+            total=await bot.get_chat_members_count(message.chat.id)
+            r_j = message.from_user.mention if message.from_user else "Anonymous" 
+            # await bot.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, r_j))       
+            await db.add_chat(message.chat.id, message.chat.title)
+            chatt = int(message.chat.id)   
+            buttons = [[InlineKeyboardButton("ꜱʜᴀʀᴇ", url="http://t.me/share/url?url=Checkout%20%40On_air_Filter_bot%20for%20searching%20files")]]
+            try:
+                link = await bot.create_chat_invite_link(chatt)
+            except:
+                sa = await message.reply_text(text=f"**Thankyou For Adding Me In {message.chat.title}**\n\n❗ __make me as admin and give Sufficient Rights__", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
+                await bot.send_message(chat_id=LOG_CHANNEL, text=f"**#NewGroup \n Title :{message.chat.title}\n ID :{message.chat.id}\n Members :{total} \n by {r_j}**")       
+            else:
+                sa = await message.reply_text(text=f"**Thankyou For Adding Me In {message.chat.title}**", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
+                await bot.send_message(chat_id=LOG_CHANNEL, text=f"**#NewGroup \n Title :{message.chat.title}\n ID :{message.chat.id}\n Members :{total} \n by {r_j} \n Link {link.invite_link}**")       
+            await asyncio.sleep(60) 
+            await sa.delete()
+        return
+        
 
 
 @Client.on_message(filters.command('leave') & filters.user(ADMINS))
@@ -86,7 +64,7 @@ async def leave_a_chat(bot, message):
         chat = chat
     try:
         buttons = [[
-            InlineKeyboardButton('Support', url=f'https://t.me/{SUPPORT_CHAT}')
+            InlineKeyboardButton('Support', url=GRP_LNK)
         ]]
         reply_markup=InlineKeyboardMarkup(buttons)
         await bot.send_message(
