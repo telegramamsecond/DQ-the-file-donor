@@ -63,7 +63,8 @@ async def give_filter(client, message):
             files, offset, total_results = await get_search_results(message.chat.id, search.lower(), offset=0, filter=True)
             if int(total_results) != int(nyva['total']):
                 BUT.pop(f"{sesna}")
-                await bot.send_message(chat_id=LOG_CHANNEL,text=f"{total_results} {nyva['total']}")
+                await client.send_message(chat_id=LOG_CHANNEL, text=f"{total_results} {nyva['total']}")
+            settings = await get_settings(message.chat.id)
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
