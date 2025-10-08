@@ -48,10 +48,10 @@ async def give_filter(client, message):
     x = search.split()
     sesna = "_".join(x)
     try:
-        data = BUTTONS[sesna]
+        nyva = BUTTONS[sesna]
     except:
         pass
-    if nyva:
+    else:
         cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
         try:
             btn = nyva['buttons']
