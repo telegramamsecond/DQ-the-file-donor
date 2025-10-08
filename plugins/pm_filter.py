@@ -47,7 +47,10 @@ async def give_filter(client, message):
     search = message.text.strip()
     x = search.split()
     sesna = "_".join(x)
-    nyva=BUT.get("sesna")
+    try:
+        data = BUTTONS[sesna]
+    except:
+        pass
     if nyva:
         cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
         try:
