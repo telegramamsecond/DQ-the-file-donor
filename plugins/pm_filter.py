@@ -1149,14 +1149,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except ListenerTimeout:
             await client.send_message(chat_id=man, text=f"**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 40 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️", disable_web_page_preview=True)
             return  
-        target_emoji = "/"
-        if target_emoji in nx:
+        if nx.startswith("/") or nx.startswith("#"):
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
         if man != nx.from_user.id:
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
-        await nx.reply("𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊")
+        await nx.reply("```𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 ``` \n\n Please wait for some time to fix 😊")
         reporter = str(man)
         btn = [[InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')]]
         await client.send_message(chat_id=LOG_CHANNEL,text=f"⚠️ ATTENTION! \n issue> {scn} \n **{nx.text}** \n ID: {man}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
@@ -1430,7 +1429,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"{search}\n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"```{search}```\n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
@@ -1462,7 +1461,7 @@ async def auto_filter(client, msg, spoll=False):
             await message.delete()
         except Exception as e:
             print(e)
-            return
+        return
         
     btn.insert(0, [
         InlineKeyboardButton(" Cʜᴇᴄᴋ Bᴏᴛ PM ", url=f"https://t.me/{temp.U_NAME}")
@@ -1728,12 +1727,14 @@ async def manual_filters(client, message, text=False):
                                     await auto_filter(client, message)
                             try:
                                 if settings['auto_delete']:
+                                    await asyncio.sleep(60)
                                     await joelkb.delete()
                             except KeyError:
                                 grpid = await active_connection(str(message.from_user.id))
                                 await save_group_settings(grpid, 'auto_delete', True)
                                 settings = await get_settings(message.chat.id)
                                 if settings['auto_delete']:
+                                    await asyncio.sleep(60)
                                     await joelkb.delete()
 
                         else:
@@ -1757,12 +1758,14 @@ async def manual_filters(client, message, text=False):
                                     await auto_filter(client, message)
                             try:
                                 if settings['auto_delete']:
+                                    await asyncio.sleep(60)
                                     await hmm.delete()
                             except KeyError:
                                 grpid = await active_connection(str(message.from_user.id))
                                 await save_group_settings(grpid, 'auto_delete', True)
                                 settings = await get_settings(message.chat.id)
                                 if settings['auto_delete']:
+                                    await asyncio.sleep(60)
                                     await hmm.delete()
 
                     elif btn == "[]":
@@ -1784,12 +1787,14 @@ async def manual_filters(client, message, text=False):
                                 await auto_filter(client, message)
                         try:
                             if settings['auto_delete']:
+                                await asyncio.sleep(60)
                                 await oto.delete()
                         except KeyError:
                             grpid = await active_connection(str(message.from_user.id))
                             await save_group_settings(grpid, 'auto_delete', True)
                             settings = await get_settings(message.chat.id)
                             if settings['auto_delete']:
+                                await asyncio.sleep(60)
                                 await oto.delete()
 
                     else:
@@ -1811,12 +1816,14 @@ async def manual_filters(client, message, text=False):
                                 await auto_filter(client, message)
                         try:
                             if settings['auto_delete']:
+                                await asyncio.sleep(60)
                                 await dlt.delete()
                         except KeyError:
                             grpid = await active_connection(str(message.from_user.id))
                             await save_group_settings(grpid, 'auto_delete', True)
                             settings = await get_settings(message.chat.id)
                             if settings['auto_delete']:
+                                await asyncio.sleep(60)
                                 await dlt.delete()
 
                 except Exception as e:
