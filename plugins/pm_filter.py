@@ -870,7 +870,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_text(f"<b><strike>{content}</strike></b>")
             await query.answer("Sᴇᴛ ᴛᴏ warn !")
             try:
-                await client.send_message(chat_id=int(from_user), text=f"<b>Hᴇʏ {user.mention},🚫 don't ask movies to bot pm, ask in group ✅ \n\n</b> ```NEXT BAN💡 ```")
+                await client.send_message(chat_id=int(from_user), text=f"<b>Hᴇʏ {user.mention},🚫 don't ask movies to bot pm, ask in group ✅ \n\n</b> NEXT BAN💡 ")
             except UserIsBlocked:
                 await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Hᴇʏ {user.mention}, Sᴏʀʀʏ Yᴏᴜʀ ʀᴇᴏ̨ᴜᴇsᴛ ɪs ᴜɴᴀᴠᴀɪʟᴀʙʟᴇ. Sᴏ ᴏᴜʀ ᴍᴏᴅᴇʀᴀᴛᴏʀs ᴄᴀɴ'ᴛ ᴜᴘʟᴏᴀᴅ ɪᴛ.\n\nNᴏᴛᴇ: Tʜɪs ᴍᴇssᴀɢᴇ ɪs sᴇɴᴛ ᴛᴏ ᴛʜɪs ɢʀᴏᴜᴘ ʙᴇᴄᴀᴜsᴇ ʏᴏᴜ'ᴠᴇ ʙʟᴏᴄᴋᴇᴅ ᴛʜᴇ ʙᴏᴛ. Tᴏ sᴇɴᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ PM, Mᴜsᴛ ᴜɴʙʟᴏᴄᴋ ᴛʜᴇ ʙᴏᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn))
         else:
@@ -1051,6 +1051,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
         
     elif query.data == "about":
+        await query.answer()
         buttons = [[
             InlineKeyboardButton('Sᴛᴀᴛᴜs', callback_data='stats'),
             InlineKeyboardButton('Sᴏᴜʀᴄᴇ Cᴏᴅᴇ', callback_data='source')
@@ -1071,9 +1072,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             except:
                 pass
-            await query.message.delete()
+            
             
     elif query.data == "source":
+        await query.answer()
         buttons = [[
             InlineKeyboardButton('𝐍𝐎', callback_data='start'),
             InlineKeyboardButton('𝐘𝐄𝐒', callback_data='stiker')
@@ -1092,9 +1094,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             except:
                 pass
-            await query.message.delete()
+            
             
     elif query.data == "helpppl":
+        await query.answer()
         buttons = [[
             InlineKeyboardButton('𝐍𝐎', callback_data='start'),
             InlineKeyboardButton('𝐘𝐄𝐒', callback_data='helpyes')
@@ -1112,9 +1115,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             except:
                 pass
-            await query.message.delete()
+            
             
     elif query.data == "helpyes":
+        await query.answer()
         buttons = [[
             InlineKeyboardButton('ᴄᴀɴ`ᴛ ꜰɪɴᴅ ᴛʜᴇ ᴍᴏᴠɪᴇ', callback_data='dcode_film')
         ],[
@@ -1140,7 +1144,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             except:
                 pass
-            await query.message.delete()
+            
             
     elif query.data.startswith("dcode"):
         ident, scn = query.data.split("_")
@@ -1159,13 +1163,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except ListenerTimeout:
             await client.send_message(chat_id=man, text=f"**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 40 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️", disable_web_page_preview=True)
             return  
-        if nx.text.startswith("/") or nx.startswith("#"):
+        gg = nx.text
+        if gg.startswith("/") or gg.startswith("#"):
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
         if man != nx.from_user.id:
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
-        await nx.reply("```𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 ``` \n\n Please wait for some time to fix 😊")
+        await nx.reply("𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊")
         reporter = str(man)
         btn = [[InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')]]
         await client.send_message(chat_id=LOG_CHANNEL,text=f"⚠️ ATTENTION! \n issue> {scn} \n **{nx.text}** \n ID: {man}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
@@ -1439,7 +1444,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"<b>{search}\n\n <b>```I couldn't find anything related to your request. 🤧Try reading the instructions below 👇```</b>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"<b>{search}\n</b> <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
