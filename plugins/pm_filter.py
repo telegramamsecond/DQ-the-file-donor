@@ -63,8 +63,7 @@ async def give_filter(client, message):
             files, offset, total_results = await get_search_results(message.chat.id, search.lower(), offset=0, filter=True)
             if int(total_results) != int(nyva['total']):
                 BUT.pop(f"{sesna}")
-                await client.send_message(chat_id=LOG_CHANNEL, text=f"{total_results} {nyva['total']}")
-            settings = await get_settings(message.chat.id)
+        settings = await get_settings(message.chat.id)
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
@@ -127,8 +126,7 @@ async def next_page(bot, query):
 
     if not files:
         return
-    settings = await get_settings(query.message.chat.id)
-    if settings['button']:
+    try:
         oam = f"{random.choice(RAT)}"
         oamm = f"{random.choice(RAT)}"
         btn = []
@@ -138,57 +136,10 @@ async def next_page(bot, query):
             fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
             filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
             btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'files#{file.file_id}')])
-    else:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}", callback_data=f'files#{file.file_id}'
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'files_#{file.file_id}',
-                ),
-            ]
-            for file in files
-        ]
-    try:
-        if settings['auto_delete']:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ɪɴꜰᴏ', 'reqinfo'),
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-
-        else:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-                
-    except KeyError:
-        grpid = await active_connection(str(query.message.from_user.id))
-        await save_group_settings(grpid, 'auto_delete', True)
-        settings = await get_settings(query.message.chat.id)
-        if settings['auto_delete']:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ɪɴꜰᴏ', 'reqinfo'),
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-
-        else:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
+    except:
+        await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
+        return
+        
     try:
         settings = await get_settings(query.message.chat.id)
         if settings['max_btn']:
@@ -200,16 +151,16 @@ async def next_page(bot, query):
                 off_set = offset - 10
             if n_offset == 0:
                 btn.append(
-                    [InlineKeyboardButton("⌫ 𝐁𝐀𝐂𝐊", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"{math.ceil(int(offset)/10)+1} / {math.ceil(total/10)}", callback_data="pages"), InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]                                                                                                    
+                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"🎪{math.ceil(int(offset)/10)+1} / {math.ceil(total/10)}🎪", callback_data="pages"), InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]                                                                                                    
                 )
             elif off_set is None:
-                btn.append([InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(f"{math.ceil(int(offset)/10)+1} / {math.ceil(total/10)}", callback_data="pages"), InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")])
+                btn.append([InlineKeyboardButton("ᴩᴀɢᴇ", callback_data="pages"), InlineKeyboardButton(f"🎪{math.ceil(int(offset)/10)+1} / {math.ceil(total/10)}🎪", callback_data="pages"), InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{req}_{key}_{n_offset}")])
             else:
                 btn.append(
                     [
-                        InlineKeyboardButton("⌫ 𝐁𝐀𝐂𝐊", callback_data=f"next_{req}_{key}_{off_set}"),
-                        InlineKeyboardButton(f"{math.ceil(int(offset)/10)+1} / {math.ceil(total/10)}", callback_data="pages"),
-                        InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")
+                        InlineKeyboardButton("⇍ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
+                        InlineKeyboardButton(f"🎪{math.ceil(int(offset)/10)+1} / {math.ceil(total/10)}🎪", callback_data="pages"),
+                        InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{req}_{key}_{n_offset}")
                     ],
                 )
         else:
@@ -221,16 +172,16 @@ async def next_page(bot, query):
                 off_set = offset - int(MAX_B_TN)
             if n_offset == 0:
                 btn.append(
-                    [InlineKeyboardButton("⌫ 𝐁𝐀𝐂𝐊", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                 )
             elif off_set is None:
-                btn.append([InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")])
+                btn.append([InlineKeyboardButton("ᴩᴀɢᴇ", callback_data="pages"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{req}_{key}_{n_offset}")])
             else:
                 btn.append(
                     [
-                        InlineKeyboardButton("⌫ 𝐁𝐀𝐂𝐊", callback_data=f"next_{req}_{key}_{off_set}"),
+                        InlineKeyboardButton("⇍ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
                         InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"),
-                        InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")
+                        InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{req}_{key}_{n_offset}")
                     ],
                 )
     except KeyError:
@@ -266,16 +217,16 @@ async def next_page(bot, query):
                 off_set = offset - int(MAX_B_TN)
             if n_offset == 0:
                 btn.append(
-                    [InlineKeyboardButton("⌫ 𝐁𝐀𝐂𝐊", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                 )
             elif off_set is None:
-                btn.append([InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")])
+                btn.append([InlineKeyboardButton("ᴩᴀɢᴇ", callback_data="pages"), InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"), InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")])
             else:
                 btn.append(
                     [
-                        InlineKeyboardButton("⌫ 𝐁𝐀𝐂𝐊", callback_data=f"next_{req}_{key}_{off_set}"),
-                        InlineKeyboardButton(f"{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}", callback_data="pages"),
-                        InlineKeyboardButton("𝐍𝐄𝐗𝐓 ➪", callback_data=f"next_{req}_{key}_{n_offset}")
+                        InlineKeyboardButton("⇍ʙᴀᴄᴋ", callback_data=f"next_{req}_{key}_{off_set}"),
+                        InlineKeyboardButton(f"🎪{math.ceil(int(offset)/int(MAX_B_TN))+1} / {math.ceil(total/int(MAX_B_TN))}🎪", callback_data="pages"),
+                        InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{req}_{key}_{n_offset}")
                     ],
                 )
     btn.insert(0, [
@@ -287,7 +238,7 @@ async def next_page(bot, query):
         )
     except MessageNotModified:
         pass
-    await query.answer()
+    return
 
 
 @Client.on_callback_query(filters.regex(r"^spol"))
@@ -332,6 +283,22 @@ async def advantage_spoll_choker(bot, query):
 
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
+    byttons = [
+        [
+            InlineKeyboardButton(text="ᴀʙᴏᴜᴛ 💡",callback_data="about"),
+            InlineKeyboardButton(text="ʜᴇʟᴩ ⛑️",callback_data="helpppl")
+        ],
+        [
+            InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🍿", url="https://t.me/+R9zxAI4mCkk0NzVl")   
+        ],
+        [
+            InlineKeyboardButton("ɢʀᴏᴜᴩ 1 🎪", url="https://t.me/+PBGW_EV3ldY5YjJl"),
+            InlineKeyboardButton("ɢʀᴏᴜᴩ 2 🎪", url="https://t.me/+eDjzTT2Ua6kwMTI1")   
+        ],
+        [
+            InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")   
+        ]
+    ]
     if query.data == "close_data":
         await query.message.delete()
     elif query.data == "gfiltersdeleteallconfirm":
@@ -978,22 +945,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
                   ]]
         
         reply_mmarkup = InlineKeyboardMarkup(buttons)
-        byttons = [
-            [
-                InlineKeyboardButton(text="ᴀʙᴏᴜᴛ 💡",callback_data="about"),
-                InlineKeyboardButton(text="ʜᴇʟᴩ ⛑️",callback_data="helpppl")
-            ],
-            [
-                InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🍿", url="https://t.me/+R9zxAI4mCkk0NzVl")   
-            ],
-            [
-                InlineKeyboardButton("ɢʀᴏᴜᴩ 1 🎪", url="https://t.me/+PBGW_EV3ldY5YjJl"),
-                InlineKeyboardButton("ɢʀᴏᴜᴩ 2 🎪", url="https://t.me/+eDjzTT2Ua6kwMTI1")   
-            ],
-            [
-                InlineKeyboardButton("ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ➕", url=f"http://t.me/{temp.U_NAME}?startgroup=true")   
-            ]
-            ]
         if query.message.text:
             try:
                 await client.edit_message_media(
@@ -1084,6 +1035,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )
+        
     elif query.data == "about":
         buttons = [[
             InlineKeyboardButton('Sᴛᴀᴛᴜs', callback_data='stats'),
@@ -1093,34 +1045,64 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.message.edit_text(
-            text=script.ABOUT_TXT.format(temp.B_NAME),
-            reply_markup=reply_markup,
+        try:
+            await query.message.edit_text(
+                text=script.ABOUT_TXT.format(temp.B_NAME),
+                reply_markup=reply_markup,
+                disable_web_page_preview=True,
+                parse_mode=enums.ParseMode.HTML
+            )
+        except:
+            await query.message.reply_text(
+            text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=InlineKeyboardMarkup(byttons),
             disable_web_page_preview=True,
-            parse_mode=enums.ParseMode.HTML
-        )
+            parse_mode=enums.ParseMode.HTML)
+            await query.message.delete()
+            
     elif query.data == "source":
         buttons = [[
             InlineKeyboardButton('𝐍𝐎', callback_data='start'),
             InlineKeyboardButton('𝐘𝐄𝐒', callback_data='stiker')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.message.edit_text(
-            text="Do you want it?",
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
+        
+        try:
+            await query.message.edit_text(
+                text="Do you want it?",
+                reply_markup=reply_markup,
+                disable_web_page_preview=True,
+                parse_mode=enums.ParseMode.HTML
+            )
+        except:
+            await query.message.reply_text(
+            text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=InlineKeyboardMarkup(byttons),
+            disable_web_page_preview=True,
+            parse_mode=enums.ParseMode.HTML)
+            await query.message.delete()
+            
     elif query.data == "helpppl":
         buttons = [[
             InlineKeyboardButton('𝐍𝐎', callback_data='start'),
             InlineKeyboardButton('𝐘𝐄𝐒', callback_data='helpyes')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.message.edit_text(
-            text="𝘈𝘳𝘦 𝘺𝘰𝘶 𝘧𝘢𝘤𝘦𝘪𝘯𝘨 𝘢𝘯𝘺 𝘪𝘴𝘴𝘶𝘦 𝘰𝘯 𝘵𝘩𝘦 𝘧𝘪𝘭𝘵𝘦𝘳 𝘣𝘰𝘵.?",
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
+        try:
+            await query.message.edit_text(
+                text="𝘈𝘳𝘦 𝘺𝘰𝘶 𝘧𝘢𝘤𝘦𝘪𝘯𝘨 𝘢𝘯𝘺 𝘪𝘴𝘴𝘶𝘦 𝘰𝘯 𝘵𝘩𝘦 𝘧𝘪𝘭𝘵𝘦𝘳 𝘣𝘰𝘵.?",
+                reply_markup=reply_markup,
+                disable_web_page_preview=True,
+                parse_mode=enums.ParseMode.HTML
+            )
+        except:
+            await query.message.reply_text(
+            text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=InlineKeyboardMarkup(byttons),
+            disable_web_page_preview=True,
+            parse_mode=enums.ParseMode.HTML)
+            await query.message.delete()
+            
     elif query.data == "helpyes":
         buttons = [[
             InlineKeyboardButton('ᴄᴀɴ`ᴛ ꜰɪɴᴅ ᴛʜᴇ ᴍᴏᴠɪᴇ', callback_data='dcode_film')
@@ -1135,11 +1117,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.message.edit_text(
-            text="select a category to report your issue 👇",
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
+        try:
+            await query.message.edit_text(
+                text="select a category to report your issue 👇",
+                reply_markup=reply_markup,
+                disable_web_page_preview=True,
+                parse_mode=enums.ParseMode.HTML
+            )
+        except:
+            await query.message.reply_text(
+            text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=InlineKeyboardMarkup(byttons),
+            disable_web_page_preview=True,
+            parse_mode=enums.ParseMode.HTML)
+            await query.message.delete()
+            
     elif query.data.startswith("dcode"):
         ident, scn = query.data.split("_")
         if scn  == "film":
@@ -1439,7 +1431,7 @@ async def auto_filter(client, msg, spoll=False):
     pre = 'filep' if settings['file_secure'] else 'file'
     oam = f"{random.choice(RAT)}"
     oamm = f"{random.choice(RAT)}"
-    if settings["button"]:
+    try:
        btn = []
        for file in files:
            sz = get_size(file.file_size)
@@ -1447,60 +1439,13 @@ async def auto_filter(client, msg, spoll=False):
            fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
            filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
-    else:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-            ]
-            for file in files
-        ]
-
-    try:
-        if settings['auto_delete']:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ɪɴꜰᴏ', 'reqinfo'),
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-
-        else:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-                
-    except KeyError:
-        grpid = await active_connection(str(message.from_user.id))
-        await save_group_settings(grpid, 'auto_delete', True)
-        settings = await get_settings(message.chat.id)
-        if settings['auto_delete']:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ɪɴꜰᴏ', 'reqinfo'),
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-
-        else:
-            btn.insert(0, 
-                [
-                    InlineKeyboardButton(f'ᴍᴏᴠɪᴇ', 'minfo'),
-                    InlineKeyboardButton(f'ꜱᴇʀɪᴇꜱ', 'sinfo')
-                ]
-            )
-
+    except:
+        try:
+            await message.delete()
+        except Exception as e:
+            print(e)
+            return
+        
     btn.insert(0, [
         InlineKeyboardButton(" Cʜᴇᴄᴋ Bᴏᴛ PM ", url=f"https://t.me/{temp.U_NAME}")
     ])
@@ -1513,11 +1458,11 @@ async def auto_filter(client, msg, spoll=False):
             settings = await get_settings(message.chat.id)
             if settings['max_btn']:
                 btn.append(
-                    [InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                    [InlineKeyboardButton("ᴩᴀɢᴇ", callback_data="pages"), InlineKeyboardButton(text=f"🎪1/{math.ceil(int(total_results)/10)}🎪",callback_data="pages"), InlineKeyboardButton(text="⇏ɴᴇxᴛ⇏",callback_data=f"next_{req}_{key}_{offset}")]
                 )
             else:
                 btn.append(
-                    [InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                    [InlineKeyboardButton("ᴩᴀɢᴇ", callback_data="pages"), InlineKeyboardButton(text=f"🎪1/{math.ceil(int(total_results)/int(MAX_B_TN))}🎪",callback_data="pages"), InlineKeyboardButton(text="⇏ɴᴇxᴛ⇏",callback_data=f"next_{req}_{key}_{offset}")]
                 )
         except KeyError:
             await save_group_settings(message.chat.id, 'max_btn', False)
