@@ -666,6 +666,26 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "pages":
         await query.answer("👀 ʟᴏᴏᴋ ᴀᴛ ɴᴇxᴛ ᴘᴀɢᴇ 🤓")
+
+    elif query.data.startswith("pmx"):
+        if clicked != typed:
+            await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+            return
+        ident, search = query.data.split("₹")
+        try:
+            nyva = BUT[search]
+        except:
+            return await query.message.delete()
+        else:
+            cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ</b>"
+            try:
+                btn = nyva['buttons']
+            except:
+                BUT.pop(f"{search}")
+            else:
+                await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+        return await query.message.delete()
+     
     elif query.data.startswith("opnsetgrp"):
         ident, grp_id = query.data.split("#")
         userid = query.from_user.id if query.from_user else None
@@ -826,13 +846,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data.startswith("show_option"):
         ident, from_user = query.data.split("#")
-        btn = [[
-                InlineKeyboardButton("Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"unavailable#{from_user}"),
-                InlineKeyboardButton("fixed", callback_data=f"uploaded#{from_user}")
-              ],
-              [
-                 InlineKeyboardButton("🚫 movies", url=f"dontmov#{from_user}")
-              ]]
+        btn = [[InlineKeyboardButton("Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"unavailable#{from_user}"), InlineKeyboardButton("fixed", callback_data=f"uploaded#{from_user}")], [InlineKeyboardButton("🚫 movies", url=f"dontmov#{from_user}")]]
+     
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
             reply_markup = InlineKeyboardMarkup(btn)
@@ -865,12 +880,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ident, from_user = query.data.split("#")
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
-            reply_markup = InlineKeyboardMarkup(btn)
             content = query.message.text
             await query.message.edit_text(f"<b><strike>{content}</strike></b>")
             await query.answer("Sᴇᴛ ᴛᴏ warn !")
             try:
-                await client.send_message(chat_id=int(from_user), text=f"<b>Hᴇʏ {user.mention},🚫 don't ask movies to bot pm, ask in group ✅ \n\n</b> NEXT BAN💡 ")
+                await client.send_message(chat_id=int(from_user), text=f"<b>Hᴇʏ {user.mention},🚫 don't ask movies in bot pm, ask only in group ✅ \n\n</b> <blockquote>NEXT BAN💡</blockquote> ")
             except UserIsBlocked:
                 await client.send_message(chat_id=int(SUPPORT_CHAT_ID), text=f"<b>Hᴇʏ {user.mention}, Sᴏʀʀʏ Yᴏᴜʀ ʀᴇᴏ̨ᴜᴇsᴛ ɪs ᴜɴᴀᴠᴀɪʟᴀʙʟᴇ. Sᴏ ᴏᴜʀ ᴍᴏᴅᴇʀᴀᴛᴏʀs ᴄᴀɴ'ᴛ ᴜᴘʟᴏᴀᴅ ɪᴛ.\n\nNᴏᴛᴇ: Tʜɪs ᴍᴇssᴀɢᴇ ɪs sᴇɴᴛ ᴛᴏ ᴛʜɪs ɢʀᴏᴜᴘ ʙᴇᴄᴀᴜsᴇ ʏᴏᴜ'ᴠᴇ ʙʟᴏᴄᴋᴇᴅ ᴛʜᴇ ʙᴏᴛ. Tᴏ sᴇɴᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ PM, Mᴜsᴛ ᴜɴʙʟᴏᴄᴋ ᴛʜᴇ ʙᴏᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn))
         else:
@@ -1418,17 +1432,15 @@ async def auto_filter(client, msg, spoll=False):
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
         men = message.from_user.mention if message.from_user else "Anonymous" 
-        if len(message.text) <= 2:
+        if len(message.text) <= 3:
             kk = await message.reply_text(f"{men},ɪɴᴄʟᴜᴅᴇ ʏᴇᴀʀ ᴏғ ᴛʜᴇ ᴍᴏᴠɪᴇ. \n\n 𝚜𝚎𝚗𝚝👉 ᴍᴏᴠɪᴇ ɴᴀᴍᴇ & yᴇᴀʀ")
-            await asyncio.sleep(10)
+            await asyncio.sleep(20)
             await kk.delete()
             try:
                 await message.delete()
             except Exception as e:
                 print(e)
                 return
-        elif 2 < len(message.text) <= 3:
-            return await advantage_spell_chok(client, msg)
         elif 3 < len(message.text) < 80:
             search = message.text
             files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
@@ -1444,7 +1456,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"<b>{search}\n</b> <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"<blockquote>{search}</blockquote> \n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
@@ -1614,11 +1626,11 @@ async def auto_filter(client, msg, spoll=False):
         if message.chat.id == SUPPORT_CHAT_ID:
             await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. Kɪɴᴅʟʏ ᴜsᴇ ɪɴʟɪɴᴇ sᴇᴀʀᴄʜ ᴏʀ ᴍᴀᴋᴇ ᴀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴀᴅᴅ ᴍᴇ ᴀs ᴀᴅᴍɪɴ ᴛᴏ ɢᴇᴛ ᴍᴏᴠɪᴇ ғɪʟᴇs. Tʜɪs ɪs ᴀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ sᴏ ᴛʜᴀᴛ ʏᴏᴜ ᴄᴀɴ'ᴛ ɢᴇᴛ ғɪʟᴇs ғʀᴏᴍ ʜᴇʀᴇ...\n\nFᴏʀ Mᴏᴠɪᴇs, Jᴏɪɴ </b>")
         else:
-            fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            hehe = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
-                    await fuk.delete()
+                    await hehe.delete()
                     await message.delete()
             except KeyError:
                 grpid = await active_connection(str(message.from_user.id))
@@ -1626,8 +1638,22 @@ async def auto_filter(client, msg, spoll=False):
                 settings = await get_settings(message.chat.id)
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
-                    await fuk.delete()
+                    await hehe.delete()
                     await message.delete()
+            try:
+                btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.message.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
+                reply_markup = InlineKeyboardMarkup(btn2)
+                pk = await client.send_message(chat_id=int(message.from_user.id), text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                await asyncio.sleep(6)
+                await pk.delete()
+            except UserIsBlocked:
+                pass
+            except:
+                btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.message.link}")]]
+                reply_markup = InlineKeyboardMarkup(btn2)
+                pk = await client.send_message(chat_id=int(message.from_user.id), text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                await asyncio.sleep(3)
+                await pk.delete()
     if spoll:
         await msg.message.delete()
 
