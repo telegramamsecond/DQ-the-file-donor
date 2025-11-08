@@ -63,7 +63,7 @@ async def give_filter(client, message):
             files, offset, total_results = await get_search_results(message.chat.id, search.lower(), offset=0, filter=True)
             if int(total_results) != int(nyva['total']):
                 BUT.pop(f"{sesna}")
-        settings = await get_settings(message.chat.id)
+            settings = await get_settings(message.chat.id)
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
@@ -1145,18 +1145,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
         man = query.from_user.id
         await query.message.delete()
         try:
-            nx = await client.ask(text=f"**{a}**", chat_id=man, timeout=30, reply_markup=ForceReply(placeholder="type issue"))
+            nx = await client.ask(text=f"**{a}**", chat_id=man, timeout=40, reply_markup=ForceReply(placeholder="type issue"))
         except ListenerTimeout:
-            await client.send_message(chat_id=man, text=f"**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 30 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️", disable_web_page_preview=True)
-            return     
+            await client.send_message(chat_id=man, text=f"**ᴛɪᴍᴇ ʟɪᴍɪᴛ ʀᴇᴀᴄʜᴇᴅ ᴏꜰ 40 ꜱᴇᴄᴏɴᴅꜱ \n\n ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ** ♻️", disable_web_page_preview=True)
+            return  
+        target_emoji = "/"
+        if target_emoji in nx:
+            await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
+            return
         if man != nx.from_user.id:
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
         await nx.reply("𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊")
         reporter = str(man)
         btn = [[InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')]]
-        await nx.forward(LOG_CHANNEL)
-        await client.send_message(chat_id=LOG_CHANNEL,text=f"⚠️ ATTENTION! \n issue> {scn} \n {nx.text}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
+        await client.send_message(chat_id=LOG_CHANNEL,text=f"⚠️ ATTENTION! \n issue> {scn} \n **{nx.text}** \n ID: {man}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
         return 
     elif query.data == "stiker":
         pari = await query.message.edit_text(
@@ -1419,6 +1422,21 @@ async def auto_filter(client, msg, spoll=False):
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
                 else:
+                    kuttons = []
+                    kuttons.append(
+                        [InlineKeyboardButton(text="ᴍᴀʟ", callback_data="instr_mal"), InlineKeyboardButton(text="ᴛᴀᴍ", callback_data="instr_tam"), InlineKeyboardButton(text="ʜɪɴ", callback_data="instr_hin"), InlineKeyboardButton(text="ᴇɴɢ", callback_data="instr_eng")]
+                    )
+                    kuttons.append(
+                        [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+                    )
+                    reply_markup = InlineKeyboardMarkup(kuttons)
+                    kk = await message.reply_text(f"{search}\n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
+                    await asyncio.sleep(150)
+                    await kk.delete()
+                    try:
+                        await message.delete()
+                    except Exception as e:
+                        print(e)
                     if NO_RESULTS_MSG:
                         await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
                     return
