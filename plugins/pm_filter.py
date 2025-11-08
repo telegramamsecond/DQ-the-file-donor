@@ -846,7 +846,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data.startswith("show_option"):
         ident, from_user = query.data.split("#")
-        btn = [[InlineKeyboardButton("Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"unavailable#{from_user}"), InlineKeyboardButton("fixed", callback_data=f"uploaded#{from_user}")], [InlineKeyboardButton("🚫 movies", url=f"dontmov#{from_user}")]]
+        btn = [[
+                InlineKeyboardButton("Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"unavailable#{from_user}"), InlineKeyboardButton("fixed", callback_data=f"uploaded#{from_user}")
+            ],[
+                InlineKeyboardButton("🚫 movies", url=f"dontmov#{from_user}")
+              ]]
      
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
@@ -1643,7 +1647,7 @@ async def auto_filter(client, msg, spoll=False):
             try:
                 btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.message.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
                 reply_markup = InlineKeyboardMarkup(btn2)
-                pk = await client.send_message(chat_id=int(message.from_user.id), text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                 await asyncio.sleep(6)
                 await pk.delete()
             except UserIsBlocked:
@@ -1651,7 +1655,7 @@ async def auto_filter(client, msg, spoll=False):
             except:
                 btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.message.link}")]]
                 reply_markup = InlineKeyboardMarkup(btn2)
-                pk = await client.send_message(chat_id=int(message.from_user.id), text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                 await asyncio.sleep(3)
                 await pk.delete()
     if spoll:
