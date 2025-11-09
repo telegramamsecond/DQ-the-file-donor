@@ -63,10 +63,11 @@ async def give_filter(client, message):
             files, offset, total_results = await get_search_results(message.chat.id, search.lower(), offset=0, filter=True)
             if int(total_results) != int(nyva['total']):
                 BUT.pop(f"{sesna}")
+            await manual_filters(client, message)
             settings = await get_settings(message.chat.id)
             try:
                 if settings['auto_delete']:
-                    await asyncio.sleep(600)
+                    await asyncio.sleep(300)
                     await fuk.delete()
                     try:
                         await message.delete()
@@ -78,7 +79,7 @@ async def give_filter(client, message):
                 await save_group_settings(grpid, 'auto_delete', True)
                 settings = await get_settings(message.chat.id)
                 if settings['auto_delete']:
-                    await asyncio.sleep(600)
+                    await asyncio.sleep(300)
                     await fuk.delete()
                     try:
                         await message.delete()
@@ -138,7 +139,7 @@ async def next_page(bot, query):
         btn = []
         for file in files:
             sz = get_size(file.file_size)
-            tt = file.file_name[0:30].title().lstrip()
+            tt = file.file_name.title().lstrip()
             fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
             filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
             btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'files#{file.file_id}')])
@@ -531,6 +532,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
         target_emoji = "🔞"
         if target_emoji in title:
             ident = "filep"
+        chat_type = query.message.chat.type
+        if chat_type == enums.ChatType.PRIVATE:
+            await query.answer(url=f"https://t.me/{temp.U_NAME}?start={ident}_{file_id}")
+            return
+        
         size = get_size(files.file_size)
         f_caption = files.caption
         settings = await get_settings(query.message.chat.id)
@@ -699,7 +705,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 BUT.pop(f"{search}")
             else:
-                await query.message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                fuk = await query.message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                await asyncio.sleep(300)
+                await fuk.delete()
         return await query.message.delete()
      
     elif query.data.startswith("opnsetgrp"):
@@ -1459,12 +1467,23 @@ async def auto_filter(client, msg, spoll=False):
             except Exception as e:
                 print(e)
                 return
-        elif 3 < len(message.text) < 80:
-            search = re.sub(r"(:|\'|\~|\-|\[|\]|\_|\.)", "", message.text, flags=re.IGNORECASE)
+        elif 3 < len(message.text) < 70:
+            pari = re.sub(r"(:|\'|\~|\-|\[|\]|\.|\,|\;|\_)", " ", message.text, flags=re.IGNORECASE)
+            try:
+                search = pari.replace("  ", " ")
+            except:
+                search = pari
             files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
+                query = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|English|english|Hindi|hindi|Telugu|telugu|1080p|720p|HEVC|Esub|Kannada|kannada|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|Tamil|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
+                xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=0, filter=True)
+                if xiles:
+                    files = xiles
+                    offset = xffset
+                    total_results = xotal_results
+                    search = query
                 else:
                     kuttons = []
                     kuttons.append(
@@ -1474,7 +1493,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"<blockquote>📍ᴩʟᴇᴀꜱᴇ ᴄʜᴇᴄᴋ ꜱᴩᴇʟʟɪɴɢ📍</blockquote> \n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"<b>I couldn't find anything related to your request. 🤧 </b><blockquote>Try reading the instructions below 👇</blockquote>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
@@ -1497,7 +1516,7 @@ async def auto_filter(client, msg, spoll=False):
        btn = []
        for file in files:
            sz = get_size(file.file_size)
-           tt = file.file_name[0:30].title().lstrip()
+           tt = file.file_name.title().lstrip()
            fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
            filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
@@ -1590,7 +1609,7 @@ async def auto_filter(client, msg, spoll=False):
                 hehe = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
                 try:
                     if settings['auto_delete']:
-                        await asyncio.sleep(600)
+                        await asyncio.sleep(300)
                         await hehe.delete()
                         try:
                             await message.delete()
@@ -1601,7 +1620,7 @@ async def auto_filter(client, msg, spoll=False):
                     await save_group_settings(grpid, 'auto_delete', True)
                     settings = await get_settings(message.chat.id)
                     if settings['auto_delete']:
-                        await asyncio.sleep(600)
+                        await asyncio.sleep(300)
                         await hehe.delete()
                         try:
                             await message.delete()
@@ -1616,7 +1635,7 @@ async def auto_filter(client, msg, spoll=False):
                 hmm = await message.reply_photo(photo=poster, caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
                 try:
                     if settings['auto_delete']:
-                        await asyncio.sleep(600)
+                        await asyncio.sleep(300)
                         await hmm.delete()
                         try:
                             await message.delete()
@@ -1627,7 +1646,7 @@ async def auto_filter(client, msg, spoll=False):
                     await save_group_settings(grpid, 'auto_delete', True)
                     settings = await get_settings(message.chat.id)
                     if settings['auto_delete']:
-                        await asyncio.sleep(600)
+                        await asyncio.sleep(300)
                         await hmm.delete()
                         try:
                             await message.delete()
@@ -1641,7 +1660,7 @@ async def auto_filter(client, msg, spoll=False):
                 fek = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
                 try:
                     if settings['auto_delete']:
-                        await asyncio.sleep(600)
+                        await asyncio.sleep(300)
                         await fek.delete()
                         try:
                             await message.delete()
@@ -1652,7 +1671,7 @@ async def auto_filter(client, msg, spoll=False):
                     await save_group_settings(grpid, 'auto_delete', True)
                     settings = await get_settings(message.chat.id)
                     if settings['auto_delete']:
-                        await asyncio.sleep(600)
+                        await asyncio.sleep(300)
                         await fek.delete()
                         try:
                             await message.delete()
@@ -1667,7 +1686,7 @@ async def auto_filter(client, msg, spoll=False):
                 btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
                 reply_markup = InlineKeyboardMarkup(btn2)
                 pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                await asyncio.sleep(6)
+                await asyncio.sleep(15)
                 await pk.delete()
             except UserIsBlocked:
                 pass
@@ -1679,11 +1698,11 @@ async def auto_filter(client, msg, spoll=False):
                 else:
                     reply_markup = InlineKeyboardMarkup(btn2)
                     pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                    await asyncio.sleep(3)
+                    await asyncio.sleep(10)
                     await pk.delete()
             try:
                 if settings['auto_delete']:
-                    await asyncio.sleep(600)
+                    await asyncio.sleep(300)
                     await hehe.delete()
                     try:
                         await message.delete()
@@ -1694,7 +1713,7 @@ async def auto_filter(client, msg, spoll=False):
                 await save_group_settings(grpid, 'auto_delete', True)
                 settings = await get_settings(message.chat.id)
                 if settings['auto_delete']:
-                    await asyncio.sleep(600)
+                    await asyncio.sleep(300)
                     await hehe.delete()
                     try:
                         await message.delete()
