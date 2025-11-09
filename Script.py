@@ -107,7 +107,7 @@ Aᴅᴅᴇᴅ Bʏ - {}"""
 ID - <code>{}</code>
 Nᴀᴍᴇ - {}"""
 
-    ALRT_TXT = """✋️ʜᴇʟʟᴏ {},
+    ALRT_TXT = """heyyy 🙌 {},
 ᴛʜɪꜱ ɪꜱ ɴᴏᴛ ʏᴏᴜʀ ᴍᴏᴠɪᴇ ʀᴇQᴜᴇꜱᴛ,
 ʀᴇQᴜᴇꜱᴛ ʏᴏᴜʀ'ꜱ...🙂"""
 
@@ -174,7 +174,7 @@ Nᴀᴍᴇ - {}"""
 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 <b>: {}</b>"""
 
     CAPTION = """
-<b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{file_name}</code>
+<blockquote> <b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{file_name}</code></blockquote> 
 
 <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"""
 
