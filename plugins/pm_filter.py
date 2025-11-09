@@ -846,11 +846,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data.startswith("show_option"):
         ident, from_user = query.data.split("#")
-        btn = [[
+        btn = [
+            [
                 InlineKeyboardButton("Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"unavailable#{from_user}"), InlineKeyboardButton("fixed", callback_data=f"uploaded#{from_user}")
-            ],[
+            ],
+            [
                 InlineKeyboardButton("🚫 movies", url=f"dontmov#{from_user}")
-              ]]
+            ]
+        ]
      
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
@@ -1188,10 +1191,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if man != nx.from_user.id:
             await nx.reply("__ᴛʜɪs ɪs ᴀɴ ɪɴᴠᴀʟɪᴅ ᴍᴇssᴀɢᴇ ᴛʀʏ ᴀɢᴀɪɴ__ ♻️")
             return
-        await nx.reply("𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂 \n\n Please wait for some time to fix 😊")
+        await nx.reply("<blockquote> 𝚈𝙾𝚄𝚁 𝙸𝚂𝚂𝚄𝙴 𝙸𝚂 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙳 𝚃𝙾 𝚃𝙷𝙴 𝙰𝙳𝙼𝙸𝙽𝚂</blockquote>  \n\n Please wait for some time to fix 😊")
         reporter = str(man)
         btn = [[InlineKeyboardButton('Show Options', callback_data=f'show_option#{reporter}')]]
-        await client.send_message(chat_id=LOG_CHANNEL,text=f"⚠️ ATTENTION! \n issue> {scn} \n **{nx.text}** \n ID: {man}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
+        await client.send_message(chat_id=LOG_CHANNEL,text=f"⚠️ ATTENTION! \n issue> {scn} \n\n **{nx.text}** \n ID: {man}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
         return 
     elif query.data == "stiker":
         pari = await query.message.edit_text(
@@ -1460,7 +1463,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"<blockquote>{search}</blockquote> \n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"<blockquote>📍ᴩʟᴇᴀꜱᴇ ᴄʜᴇᴄᴋ ꜱᴩᴇʟʟɪɴɢ📍</blockquote> \n\n <b>I couldn't find anything related to your request. 🤧Try reading the instructions below 👇</b>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
@@ -1645,7 +1648,7 @@ async def auto_filter(client, msg, spoll=False):
                     await hehe.delete()
                     await message.delete()
             try:
-                btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.message.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
+                btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
                 reply_markup = InlineKeyboardMarkup(btn2)
                 pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                 await asyncio.sleep(6)
