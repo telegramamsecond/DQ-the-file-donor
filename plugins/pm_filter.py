@@ -846,14 +846,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data.startswith("show_option"):
         ident, from_user = query.data.split("#")
-        btn = [
-            [
-                InlineKeyboardButton("Uɴᴀᴠᴀɪʟᴀʙʟᴇ", callback_data=f"unavailable#{from_user}"), InlineKeyboardButton("fixed", callback_data=f"uploaded#{from_user}")
-            ],
-            [
-                InlineKeyboardButton("🚫 movies", url=f"dontmov#{from_user}")
-            ]
-        ]
+        btn = [[
+                InlineKeyboardButton("ꜰɪx❌", callback_data=f"unavailable#{from_user}"), InlineKeyboardButton("ꜰɪxᴇᴅ", callback_data=f"uploaded#{from_user}"), InlineKeyboardButton("ᴡᴀʀɴ", callback_data=f"dontmov#{from_user}")
+              ]]
      
         if query.from_user.id in ADMINS:
             user = await client.get_users(from_user)
@@ -1449,7 +1444,7 @@ async def auto_filter(client, msg, spoll=False):
                 print(e)
                 return
         elif 3 < len(message.text) < 80:
-            search = message.text
+            search = re.sub(r"(:|\'|\~|\-|\[|\]|\_|\.)", "", message.text, flags=re.IGNORECASE)
             files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
@@ -1656,7 +1651,11 @@ async def auto_filter(client, msg, spoll=False):
             except UserIsBlocked:
                 pass
             except:
-                btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.message.link}")]]
+                try:
+                    btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.link}")]]
+                except:
+                    pass
+                else:
                 reply_markup = InlineKeyboardMarkup(btn2)
                 pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                 await asyncio.sleep(3)
