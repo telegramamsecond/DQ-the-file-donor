@@ -604,15 +604,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer("Once this movie is releas HDRip/OTT, it will be upload on the👇 💒channel \n\n\n ഈ സിനിമയുടെ HD/OTT ഇറങ്ങിയാൽ ഉടൻ ചുവടെ ഉള്ള 💒ചാനലിൽ അപ്‌ലോഡ് ചെയ്യുന്നതാണ്",show_alert=True)
             return
         
-        x = message.text.split()
-        hari = "+".join(x)
         kuttons = []
-        kuttons.append(
-            [InlineKeyboardButton(text=f"ɢᴏᴏɢʟᴇ 🍿", url=f"https://google.com/search?q={hari}"),InlineKeyboardButton(text=f"ᴏʀ ɪᴍᴅʙ 🍿", url=f"https://www.imdb.com/find?q={hari}")]
-        )
-        kuttons.append(
-            [InlineKeyboardButton(text="ʀᴇᴩᴏʀᴛ ᴛᴏ ᴀᴅᴍɪɴ",callback_data=f"report_{hari}")]
-        )
+        try:
+            x = message.text.split()
+        except:
+            kuttons.append(
+                [InlineKeyboardButton(text=f"ɢᴏᴏɢʟᴇ 🍿", url=f"https://google.com/search")]
+            )
+        else:
+            hari = "+".join(x)
+            kuttons.append(
+                [InlineKeyboardButton(text=f"ɢᴏᴏɢʟᴇ 🍿", url=f"https://google.com/search?q={hari}"),InlineKeyboardButton(text=f"ᴏʀ ɪᴍᴅʙ 🍿", url=f"https://www.imdb.com/find?q={hari}")]
+            )
+            kuttons.append(
+                [InlineKeyboardButton(text="ʀᴇᴩᴏʀᴛ ᴛᴏ ᴀᴅᴍɪɴ",callback_data=f"report_{hari}")]
+            )
         reply_markup = InlineKeyboardMarkup(kuttons)
         if lang  == "mal":
             a = await query.message.edit_text(INMAL, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
@@ -687,7 +693,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             return await query.message.delete()
         else:
-            cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ</b>"
+            cap = f"<b>Hᴇʏ 🙌{query.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ</b>"
             try:
                 btn = nyva['buttons']
             except:
@@ -1676,8 +1682,6 @@ async def auto_filter(client, msg, spoll=False):
                     await asyncio.sleep(3)
                     await pk.delete()
             try:
-                if int(grpid) not in ADMINS:
-                    pass
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
                     await hehe.delete()
