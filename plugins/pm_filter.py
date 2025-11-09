@@ -1656,10 +1656,10 @@ async def auto_filter(client, msg, spoll=False):
                 except:
                     pass
                 else:
-                reply_markup = InlineKeyboardMarkup(btn2)
-                pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                await asyncio.sleep(3)
-                await pk.delete()
+                    reply_markup = InlineKeyboardMarkup(btn2)
+                    pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                    await asyncio.sleep(3)
+                    await pk.delete()
     if spoll:
         await msg.message.delete()
 
