@@ -699,7 +699,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 BUT.pop(f"{search}")
             else:
-                await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                await query.message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
         return await query.message.delete()
      
     elif query.data.startswith("opnsetgrp"):
