@@ -673,7 +673,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            nyva = BUT.keys()
+            my_list = BUT.keys()
+            nyva = my_list.sort(reverse=True)
             
         except Exception as e:
             await query.answer(f"some error occurred, try again {e}",show_alert=True)
@@ -682,7 +683,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             oamm = f"{random.choice(RAT)}"
             btn = []
             if len(nyva) > 12:
-                gs_parsed = gs_parsed[:12]
+                nyva = nyva[:12]
             for file in nyva:
                 tt = file.title().lstrip()
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
@@ -776,6 +777,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         try:
             nyva = BUT[search]
         except:
+            await query.answer("Nᴏ sᴜᴄʜ ғɪʟᴇ ᴇxɪsᴛ, try again 🛟", show_alert=True)
             return await query.message.delete()
         else:
             cap = f"<b>Hᴇʏ 🙌{query.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ</b>"
