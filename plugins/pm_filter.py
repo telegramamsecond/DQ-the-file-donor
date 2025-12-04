@@ -672,14 +672,16 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            nva = BUT.keys()
-            nyva = nva[0:11] 
+            nyva = BUT.keys()
+            
         except Exception as e:
-            await query.answer("some error occurred, try again",show_alert=True)
+            await query.answer(f"some error occurred, try again {e}",show_alert=True)
             return await query.message.delete()
         else:
             oamm = f"{random.choice(RAT)}"
             btn = []
+            if len(nyva) > 12:
+                gs_parsed = gs_parsed[:12]
             for file in nyva:
                 tt = file.title().lstrip()
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
