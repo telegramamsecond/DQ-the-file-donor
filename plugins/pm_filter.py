@@ -45,6 +45,14 @@ PHOTT = ["https://telegra.ph/file/9075ca7cbad944afaa823.jpg", "https://telegra.p
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     search = message.text.strip()
+    mach = ["episode", "season"]
+    text_words = set(message.text.lower().split())
+    for word in mach:
+        if word in text_words:
+            kj = await message.reply_text(SEEP, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+            await asyncio.sleep(20)
+            await kj.delete() 
+            return
     y = search.split()
     x = "_".join(y)
     sesna = x.lower()
@@ -655,7 +663,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     InlineKeyboardButton("ɴᴏᴛ ❌", callback_data=f"onavailable#{from_user}"), InlineKeyboardButton("ꜰɪxᴇᴅ", callback_data=f"oploaded#{from_user}")
                   ]]
             try:
-                await client.send_message(chat_id=LOG_CHANNEL,text=f"{query.message.reply_to_message.text}", disable_web_page_preview=True)
+                await client.send_message(chat_id=LOG_CHANNEL,text=f"{query.message.reply_to_message.text}", reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
             except:
                 await query.answer("𝚂𝚄𝙲𝙲𝙴𝚂𝚂𝙵𝚄𝙻𝙻𝚈 Reported to Admins 👮‍♂",show_alert=True)
             else:
@@ -748,9 +756,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 BUT.pop(f"{search}")
             else:
                 fuk = await query.message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                await query.message.delete()
                 await asyncio.sleep(300)
                 await fuk.delete()
-        return await query.message.delete()
+        return 
      
     elif query.data.startswith("opnsetgrp"):
         ident, grp_id = query.data.split("#")
@@ -1528,14 +1537,6 @@ async def auto_filter(client, msg, spoll=False):
                     search = query
                 else:
                     kuttons = []
-                    mach = ["episode", "Episode", "Season", "season"]
-                    text_words = set(message.text.lower().split())
-                    for word in mach:
-                        if word in text_words:
-                            kj = await message.reply_text(SEEP, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                            await asyncio.sleep(20)
-                            await kj.delete() 
-                            return
                     kuttons.append(
                         [InlineKeyboardButton(text="ᴍᴀʟ", callback_data="instr_mal"), InlineKeyboardButton(text="ᴛᴀᴍ", callback_data="instr_tam"), InlineKeyboardButton(text="ʜɪɴ", callback_data="instr_hin"), InlineKeyboardButton(text="ᴇɴɢ", callback_data="instr_eng")]
                     )
@@ -1736,7 +1737,7 @@ async def auto_filter(client, msg, spoll=False):
                 btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
                 reply_markup = InlineKeyboardMarkup(btn2)
                 pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                await asyncio.sleep(15)
+                await asyncio.sleep(25)
                 await pk.delete()
             except UserIsBlocked:
                 pass
@@ -1748,7 +1749,7 @@ async def auto_filter(client, msg, spoll=False):
                 else:
                     reply_markup = InlineKeyboardMarkup(btn2)
                     pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                    await asyncio.sleep(10)
+                    await asyncio.sleep(19)
                     await pk.delete()
             try:
                 if settings['auto_delete']:
@@ -1890,17 +1891,8 @@ async def manual_filters(client, message, text=False):
                                 reply_to_message_id=reply_id
                             )
                             try:
-                                if settings['auto_ffilter']:
-                                    await auto_filter(client, message)
-                            except KeyError:
-                                grpid = await active_connection(str(message.from_user.id))
-                                await save_group_settings(grpid, 'auto_ffilter', True)
-                                settings = await get_settings(message.chat.id)
-                                if settings['auto_ffilter']:
-                                    await auto_filter(client, message)
-                            try:
                                 if settings['auto_delete']:
-                                    await asyncio.sleep(160)
+                                    await asyncio.sleep(360)
                                     try:
                                         await message.delete()
                                     except:
@@ -1911,7 +1903,7 @@ async def manual_filters(client, message, text=False):
                                 await save_group_settings(grpid, 'auto_delete', True)
                                 settings = await get_settings(message.chat.id)
                                 if settings['auto_delete']:
-                                    await asyncio.sleep(160)
+                                    await asyncio.sleep(360)
                                     try:
                                         await message.delete()
                                     except:
@@ -1929,17 +1921,8 @@ async def manual_filters(client, message, text=False):
                                 reply_to_message_id=reply_id
                             )
                             try:
-                                if settings['auto_ffilter']:
-                                    await auto_filter(client, message)
-                            except KeyError:
-                                grpid = await active_connection(str(message.from_user.id))
-                                await save_group_settings(grpid, 'auto_ffilter', True)
-                                settings = await get_settings(message.chat.id)
-                                if settings['auto_ffilter']:
-                                    await auto_filter(client, message)
-                            try:
                                 if settings['auto_delete']:
-                                    await asyncio.sleep(160)
+                                    await asyncio.sleep(360)
                                     try:
                                         await message.delete()
                                     except:
@@ -1950,7 +1933,7 @@ async def manual_filters(client, message, text=False):
                                 await save_group_settings(grpid, 'auto_delete', True)
                                 settings = await get_settings(message.chat.id)
                                 if settings['auto_delete']:
-                                    await asyncio.sleep(160)
+                                    await asyncio.sleep(360)
                                     try:
                                         await message.delete()
                                     except:
@@ -1966,17 +1949,8 @@ async def manual_filters(client, message, text=False):
                             reply_to_message_id=reply_id
                         )
                         try:
-                            if settings['auto_ffilter']:
-                                await auto_filter(client, message)
-                        except KeyError:
-                            grpid = await active_connection(str(message.from_user.id))
-                            await save_group_settings(grpid, 'auto_ffilter', True)
-                            settings = await get_settings(message.chat.id)
-                            if settings['auto_ffilter']:
-                                await auto_filter(client, message)
-                        try:
                             if settings['auto_delete']:
-                                await asyncio.sleep(160)
+                                await asyncio.sleep(360)
                                 try:
                                     await message.delete()
                                 except:
@@ -2003,17 +1977,8 @@ async def manual_filters(client, message, text=False):
                             reply_to_message_id=reply_id
                         )
                         try:
-                            if settings['auto_ffilter']:
-                                await auto_filter(client, message)
-                        except KeyError:
-                            grpid = await active_connection(str(message.from_user.id))
-                            await save_group_settings(grpid, 'auto_ffilter', True)
-                            settings = await get_settings(message.chat.id)
-                            if settings['auto_ffilter']:
-                                await auto_filter(client, message)
-                        try:
                             if settings['auto_delete']:
-                                await asyncio.sleep(160)
+                                await asyncio.sleep(360)
                                 try:
                                     await message.delete()
                                 except:
@@ -2034,6 +1999,24 @@ async def manual_filters(client, message, text=False):
                 except Exception as e:
                     logger.exception(e)
                 break
+            searrch = name.strip()
+            y = searrch.split()
+            x = "_".join(y)
+            sesna = x.lower()
+            try:
+                nyva = BUT[sesna]
+            except:
+                pass
+            else:
+                try:
+                    if settings['auto_ffilter']:
+                        await auto_filter(client, message)
+                except KeyError:
+                    grpid = await active_connection(str(message.from_user.id))
+                    await save_group_settings(grpid, 'auto_ffilter', True)
+                    settings = await get_settings(message.chat.id)
+                    if settings['auto_ffilter']:
+                        await auto_filter(client, message)
     else:
         return False
 
