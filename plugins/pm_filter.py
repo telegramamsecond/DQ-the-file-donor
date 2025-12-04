@@ -673,7 +673,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            my_list = list(BUT.keys())
+            my_list = BUT.keys()
             nyva = my_list.reverse()
             
         except Exception as e:
