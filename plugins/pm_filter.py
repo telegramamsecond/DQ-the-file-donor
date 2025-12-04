@@ -682,13 +682,15 @@ async def cb_handler(client: Client, query: CallbackQuery):
         else:
             oamm = f"{random.choice(RAT)}"
             btn = []
-            if len(nyva) > 12:
-                nyva = nyva[:12]
+            if len(nyva) > 13:
+                nyva = nyva[:13]
             for file in nyva:
                 tt = file.title().lstrip()
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
                 filenaame = f"{oamm} {fn}"
                 btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f"pmx₹{file}")])
+               
+        btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
         reply_markup = InlineKeyboardMarkup(btn)
         try:
             await query.message.edit_text(text="Select any recent file 👇", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
