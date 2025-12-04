@@ -672,7 +672,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            nyva = BUT[0:11]
+            pari = BUT.sort
+            nyva = pari[0:11]
         except:
             await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
             return
