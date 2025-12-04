@@ -674,8 +674,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data.startswith("recent"):
         try:
             my_list = BUT.keys()
-            hha = list(my_list)
-            nyva = hha.reverse()
+            nyva = sorted(my_list, reverse=True)
             
         except Exception as e:
             await query.answer(f"some error occurred, try again {e}",show_alert=True)
