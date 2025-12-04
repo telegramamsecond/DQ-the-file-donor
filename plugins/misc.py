@@ -53,7 +53,22 @@ async def showid(client, message):
             _id,
             quote=True
         )
-
+@Client.on_message(filters.command(["recent"]))
+async def who_isrecent(client, message):
+    chat_type = message.chat.type
+    if chat_type == enums.ChatType.PRIVATE:
+        buttons = [[
+            InlineKeyboardButton('recent files', callback_data='recent')
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await message.reply_text(
+            text="recently added files 👇",
+            reply_markup=reply_markup,
+            quote=True,
+            parse_mode=enums.ParseMode.HTML,
+            disable_notification=True
+        )
+    
 @Client.on_message(filters.command(["info"]))
 async def who_is(client, message):
     # https://github.com/SpEcHiDe/PyroGramBot/blob/master/pyrobot/plugins/admemes/whois.py#L19
