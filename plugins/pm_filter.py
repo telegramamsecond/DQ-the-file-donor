@@ -672,11 +672,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            nyva = BUT[int(11)].copy()
-            
-        except:
-            await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
-            return
+            nva = BUT.keys()
+            nyva = nva[0:11] 
+        except Exception as e:
+            await query.answer("some error occurred, try again",show_alert=True)
+            return await query.message.delete()
         else:
             oamm = f"{random.choice(RAT)}"
             btn = []
@@ -693,6 +693,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             except:
                 pass
+        return await query.message.delete()
                 
     elif query.data.startswith("onavailable"):
         ident, from_user = query.data.split("#")
