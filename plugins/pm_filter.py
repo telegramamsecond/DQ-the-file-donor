@@ -305,6 +305,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton(text="ʜᴇʟᴩ ⛑️",callback_data="helpppl")
         ],
         [
+            InlineKeyboardButton(text="ʀᴇᴄᴇɴᴛ 📚",callback_data="recent"),
             InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ 🍿", url="https://t.me/+R9zxAI4mCkk0NzVl")   
         ],
         [
@@ -695,7 +696,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             except:
                 pass
-        return await query.message.delete()
+        return 
                 
     elif query.data.startswith("onavailable"):
         ident, from_user = query.data.split("#")
