@@ -38,6 +38,7 @@ MYRE = ["CAADBQAD2AMAAvjDaFSsTHfTpJDaShYE", "CAACAgUAAyEFAASbXix3AAPvaON_uhWTWNj
 BUTTONS = {}
 BUT = {}
 SPELL_CHECK = {}
+RESEND = {}
 RAT = ["🦋", "🌸", "🦄", "🎈", "🥀", "🌻", "🍭", "🍿", "🪁", "🗼", "🪗", "🎬", "❤️‍🔥",]
 PHOTT = ["https://telegra.ph/file/9075ca7cbad944afaa823.jpg", "https://telegra.ph/file/9688c892ad2f2cf5c3f68.jpg", "https://telegra.ph/file/51683050f583af4c81013.jpg",]
 
@@ -669,6 +670,29 @@ async def cb_handler(client: Client, query: CallbackQuery):
             else:
                 await query.answer("𝚂𝚄𝙲𝙲𝙴𝚂𝚂𝙵𝚄𝙻𝙻𝚈 Reported to Admins 👮‍♂ \n\n Thanks for your contribution",show_alert=True)
         return await query.message.delete()
+    elif query.data.startswith("recent"):
+        try:
+            nyva = BUT[0:11]
+        except:
+            await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
+            return
+        else:
+            oamm = f"{random.choice(RAT)}"
+            btn = []
+            for file in nyva:
+                tt = file.title().lstrip()
+                fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
+                filenaame = f"{oamm} {fn}"
+                btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f"pmx₹{file}")])
+        reply_markup = InlineKeyboardMarkup(btn)
+        try:
+            await query.message.edit_text(text="Select any recent file 👇", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+        except:
+            try:
+                await client.send_message(chat_id=query.from_user.id, text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME), reply_markup=InlineKeyboardMarkup(byttons), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+            except:
+                pass
+                
     elif query.data.startswith("onavailable"):
         ident, from_user = query.data.split("#")
         btn = [[
@@ -2006,8 +2030,6 @@ async def manual_filters(client, message, text=False):
             try:
                 nyva = BUT[sesna]
             except:
-                pass
-            else:
                 try:
                     if settings['auto_ffilter']:
                         await auto_filter(client, message)
@@ -2017,6 +2039,8 @@ async def manual_filters(client, message, text=False):
                     settings = await get_settings(message.chat.id)
                     if settings['auto_ffilter']:
                         await auto_filter(client, message)
+            else:
+                pass                
     else:
         return False
 
