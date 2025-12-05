@@ -73,6 +73,14 @@ async def give_filter(client, message):
             if int(total_results) != int(nyva['total']):
                 BUT.pop(f"{sesna}")
             await manual_filters(client, message)
+            try:
+                count = RESEND.get(f"{sesna}")
+            except:
+                pass
+            else:
+                new = int(count) + 1
+                RESEND.pop(f"{sesna}")
+                RESEND[sesna] = new
             settings = await get_settings(message.chat.id)
             try:
                 if settings['auto_delete']:
@@ -673,22 +681,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            nyva = BUT.keys()
-             
+            # nyva = RESEND.keys()
+            ffd = sorted(RESEND.items(), key=lambda item: item[1])
+            nyva = ffd.keys()
         except Exception as e:
             await query.answer(f"some error occurred, try again {e}",show_alert=True)
             return await query.message.delete()
         else:
             oamm = f"{random.choice(RAT)}"
             btn = []
-            if len(nyva) > 13:
-                nyva = nyva[:13]
             for file in reversed(nyva):
                 tt = file.title().lstrip()
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
                 filenaame = f"{oamm} {fn}"
                 btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f"pmx₹{file}")])
-               
+        if len(btn) > 15:
+            btn = btn[:15]      
         btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
         reply_markup = InlineKeyboardMarkup(btn)
         try:
@@ -1648,6 +1656,7 @@ async def auto_filter(client, msg, spoll=False):
     x = "_".join(y)
     sesna = x.lower()
     BUT[sesna] = {"total" : str(total_results), "buttons" : btn}
+    RESEND[sesna] = "1"
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
     if imdb:
