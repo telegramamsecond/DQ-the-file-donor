@@ -683,14 +683,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         try:
             # nyva = RESEND.keys()
             ffd = sorted(RESEND.items(), key=lambda item: item[1])
-            nyva = ffd.keys()
         except Exception as e:
             await query.answer(f"some error occurred, try again {e}",show_alert=True)
             return await query.message.delete()
         else:
             oamm = f"{random.choice(RAT)}"
             btn = []
-            for file in reversed(nyva):
+            for file, value in reversed(nyva):
                 tt = file.title().lstrip()
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
                 filenaame = f"{oamm} {fn}"
