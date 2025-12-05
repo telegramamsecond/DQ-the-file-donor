@@ -80,7 +80,7 @@ async def give_filter(client, message):
             else:
                 new = int(count) + 1
                 RESEND.pop(f"{sesna}")
-                RESEND[sesna] = new
+                RESEND[sesna] = int(f"{new}")
             settings = await get_settings(message.chat.id)
             try:
                 if settings['auto_delete']:
@@ -1655,7 +1655,7 @@ async def auto_filter(client, msg, spoll=False):
     x = "_".join(y)
     sesna = x.lower()
     BUT[sesna] = {"total" : str(total_results), "buttons" : btn}
-    RESEND[sesna] = "1"
+    RESEND[sesna] = int("1")
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
     if imdb:
