@@ -673,9 +673,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return await query.message.delete()
     elif query.data.startswith("recent"):
         try:
-            my_list = BUT.keys()
-            nyva = sorted(my_list, reverse=True)
-            
+            nyva = BUT.keys()
+             
         except Exception as e:
             await query.answer(f"some error occurred, try again {e}",show_alert=True)
             return await query.message.delete()
@@ -684,7 +683,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             btn = []
             if len(nyva) > 13:
                 nyva = nyva[:13]
-            for file in nyva:
+            for file in reversed(nyva):
                 tt = file.title().lstrip()
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
                 filenaame = f"{oamm} {fn}"
