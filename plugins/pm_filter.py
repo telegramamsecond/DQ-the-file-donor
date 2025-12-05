@@ -682,7 +682,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data.startswith("recent"):
         try:
             # nyva = RESEND.keys()
-            ffd = sorted(RESEND.items(), key=lambda item: item[1])
+            nyva = sorted(RESEND.items(), key=lambda item: item[1])
         except Exception as e:
             await query.answer(f"some error occurred, try again {e}",show_alert=True)
             return await query.message.delete()
