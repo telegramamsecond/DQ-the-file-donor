@@ -46,17 +46,10 @@ PHOTT = ["https://telegra.ph/file/9075ca7cbad944afaa823.jpg", "https://telegra.p
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     search = message.text.strip()
-    mach = ["episode", "season"]
-    text_words = set(message.text.lower().split())
-    for word in mach:
-        if word in text_words:
-            kj = await message.reply_text(SEEP, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-            await asyncio.sleep(20)
-            await kj.delete() 
-            return
     y = search.split()
     x = "_".join(y)
     sesna = x.lower()
+    
     try:
         nyva = BUT[sesna]
     except:
@@ -694,8 +687,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
                 filenaame = f"{oamm} {fn}"
                 btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f"pmx₹{file}")])
-        if len(btn) > 15:
-            btn = btn[:15]      
+        if len(btn) > 8:
+            btn = btn[:8]      
         btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
         reply_markup = InlineKeyboardMarkup(btn)
         try:
@@ -1568,13 +1561,49 @@ async def auto_filter(client, msg, spoll=False):
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
                 query = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|English|english|Hindi|hindi|Telugu|telugu|1080p|720p|HEVC|Esub|Kannada|kannada|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|Tamil|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
-                xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=0, filter=True)
+                yy = query.split()
+                xx = "_".join(yy)
+                sessna = xx.lower()
+                try:
+                    nyvaa = BUT[sessna]
+                except:
+                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=0, filter=True)
+                else:
+                    cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
+                    try:
+                        btn = nyvaa['buttons']
+                    except:
+                        BUT.pop(f"{sessna}")
+                    else:
+                        fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                        files, offset, total_results = await get_search_results(message.chat.id, query.lower(), offset=0, filter=True)
+                        if int(total_results) != int(nyvaa['total']):
+                            BUT.pop(f"{sessna}")
+                        await asyncio.sleep(300)
+                        await fuk.delete()
+                        try:
+                            await message.delete()
+                        except:
+                            pass
+                        return
                 if xiles:
                     files = xiles
                     offset = xffset
                     total_results = xotal_results
                     search = query
                 else:
+                    mach = ["episode", "season"]
+                    text_words = set(message.text.lower().split())
+                    for word in mach:
+                        if word in text_words:
+                            kj = await message.reply_text(SEEP, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                            await asyncio.sleep(30)
+                            await kj.delete() 
+                            try:
+                                await message.delete()
+                            except Exception as e:
+                                print(e)
+                            return
                     kuttons = []
                     kuttons.append(
                         [InlineKeyboardButton(text="ᴍᴀʟ", callback_data="instr_mal"), InlineKeyboardButton(text="ᴛᴀᴍ", callback_data="instr_tam"), InlineKeyboardButton(text="ʜɪɴ", callback_data="instr_hin"), InlineKeyboardButton(text="ᴇɴɢ", callback_data="instr_eng")]
@@ -1655,7 +1684,10 @@ async def auto_filter(client, msg, spoll=False):
     x = "_".join(y)
     sesna = x.lower()
     BUT[sesna] = {"total" : str(total_results), "buttons" : btn}
-    RESEND[sesna] = int("1")
+    try:
+        nyva = RESEND[sesna]
+    except:
+        RESEND[sesna] = int("1")
     imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
     TEMPLATE = settings['template']
     if imdb:
@@ -1691,7 +1723,13 @@ async def auto_filter(client, msg, spoll=False):
             **locals()
         )
     else:
-        cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+        mach1 = "episode"
+        mach2 = "season"
+        text_words = message.text.lower()
+        if mach1 in text_words or mach2 in text_words:
+            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>\n <blockquote>{SEEP}</blockquote>"
+        else:
+            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
     if imdb and imdb.get('poster'):
         try:
             if message.chat.id == SUPPORT_CHAT_ID:
@@ -1909,6 +1947,10 @@ async def manual_filters(client, message, text=False):
     settings = await get_settings(message.chat.id)
     group_id = message.chat.id
     name = text or message.text
+    searrch = name.strip()
+    y = searrch.split()
+    x = "_".join(y)
+    sesna = x.lower()
     reply_id = message.reply_to_message.id if message.reply_to_message else message.id
     keywords = await get_filters(group_id)
     for keyword in reversed(sorted(keywords, key=len)):
@@ -1930,6 +1972,10 @@ async def manual_filters(client, message, text=False):
                                 protect_content=True if settings["file_secure"] else False,
                                 reply_to_message_id=reply_id
                             )
+                            try:
+                                nyva = BUT[sesna]
+                            except:
+                                await auto_filter(client, message)
                             try:
                                 if settings['auto_delete']:
                                     await asyncio.sleep(360)
@@ -1961,6 +2007,10 @@ async def manual_filters(client, message, text=False):
                                 reply_to_message_id=reply_id
                             )
                             try:
+                                nyva = BUT[sesna]
+                            except:
+                                await auto_filter(client, message)
+                            try:
                                 if settings['auto_delete']:
                                     await asyncio.sleep(360)
                                     try:
@@ -1988,6 +2038,10 @@ async def manual_filters(client, message, text=False):
                             protect_content=True if settings["file_secure"] else False,
                             reply_to_message_id=reply_id
                         )
+                        try:
+                            nyva = BUT[sesna]
+                        except:
+                            await auto_filter(client, message)
                         try:
                             if settings['auto_delete']:
                                 await asyncio.sleep(360)
@@ -2017,6 +2071,10 @@ async def manual_filters(client, message, text=False):
                             reply_to_message_id=reply_id
                         )
                         try:
+                            nyva = BUT[sesna]
+                        except:
+                            await auto_filter(client, message)
+                        try:
                             if settings['auto_delete']:
                                 await asyncio.sleep(360)
                                 try:
@@ -2039,24 +2097,8 @@ async def manual_filters(client, message, text=False):
                 except Exception as e:
                     logger.exception(e)
                 break
-            searrch = name.strip()
-            y = searrch.split()
-            x = "_".join(y)
-            sesna = x.lower()
-            try:
-                nyva = BUT[sesna]
-            except:
-                try:
-                    if settings['auto_ffilter']:
-                        await auto_filter(client, message)
-                except KeyError:
-                    grpid = await active_connection(str(message.from_user.id))
-                    await save_group_settings(grpid, 'auto_ffilter', True)
-                    settings = await get_settings(message.chat.id)
-                    if settings['auto_ffilter']:
-                        await auto_filter(client, message)
             else:
-                pass                
+                pass              
     else:
         return False
 
