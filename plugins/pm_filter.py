@@ -555,14 +555,16 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return
         
         size = get_size(files.file_size)
-        caption = re.sub(r"(#|\[.*?\]|mkv|\B@\w+|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE)
         if title == "None":
-            title = caption 
-            
-        chk = f"{title}{caption}".lower()
+            try:
+                title = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|srt|https?://\S+|www\.\S+|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+            except:
+                title = "None"
+                await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=file_id, caption="check the file")
         resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE)
         if resolutions:
-            res = ' '.join(resolutions)
+            mylist = list(dict.fromkeys(resolutions))
+            res = ' '.join(mylist)
             resolutions = f"<blockquote>🎥Quality : {res}</blockquote>"
         settings = await get_settings(query.message.chat.id)
         f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code></blockquote> {f'{resolutions}' if resolutions else ''}\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
