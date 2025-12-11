@@ -560,7 +560,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             title = caption 
             
         chk = f"{title}{caption}".lower()
-        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE).strip()
+        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE)
         if resolutions:
             res = ' '.join(resolutions)
             resolutions = f"\n<blockquote>🎥Quality : {res}</blockquote>"
