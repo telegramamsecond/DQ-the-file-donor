@@ -561,7 +561,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 title = "None"
                 await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=file_id, caption="check the file")
-        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE)
+        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", title, re.IGNORECASE)
         if resolutions:
             mylist = list(dict.fromkeys(resolutions))
             res = ' '.join(mylist)
