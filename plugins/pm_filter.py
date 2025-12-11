@@ -569,7 +569,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         short_to_full_map = {'tam': 'tamil', 'tel': 'telugu', 'hin': 'hindi', 'eng': 'english', 'Multi': 'multi-audio✅', 'mal': 'malayalam'}
         for old_word, new_word in short_to_full_map.items():
             chk = chk.replace(old_word, new_word)
-        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean)\b", chk, re.IGNORECASE)
+        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean)\b", title2.lower(), re.IGNORECASE)
         if language:
             myrlist = list(dict.fromkeys(language))
             ress = ', '.join(myrlist)
@@ -579,8 +579,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if resolutions:
             mylist = list(dict.fromkeys(resolutions))
             res = ' '.join(mylist)
+            try:
+                title = title.replace(res, "")
+            except:
+                pass
             resolutions = f"<b>\n\n🎥Quality : {res}</b>"
-        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b", chk, re.IGNORECASE))
+        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b", chk, re.IGNORECASE)
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
@@ -784,6 +788,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             caption=f_caption,
             protect_content=True if ident == 'checksubp' else False
         )
+        await query.message.delete()
     elif query.data == "pages":
         await query.answer("👀 ʟᴏᴏᴋ ᴀᴛ ɴᴇxᴛ ᴘᴀɢᴇ 🤓")
 
