@@ -555,15 +555,20 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return
         
         size = get_size(files.file_size)
-        caption = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+        caption = re.sub(r"(#|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
         if title == "None":
             title = caption 
             
         chk = f"{title}{caption}".lower()
-        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE)
-        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|urdu)\b", chk, re.IGNORECASE)
+        words = chk.split()
+        unique_words = dict.fromkeys(words)
+        titlle = ' '.join(unique_words.keys())
+        title = re.sub(r"\B@\w+", "@on_air_moviess", titlle, flags=re.IGNORECASE).strip()
+        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", title, re.IGNORECASE)
+        if resolutions:
+            resolutions = f"\n🎥Quality : {resolutions}"
         settings = await get_settings(query.message.chat.id)
-        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code></blockquote> {f\'\n🎥Quality : {resolutions}\' if resolutions else \'\'}\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
+        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title.title()}</code></blockquote> {f'{resolutions}' if resolutions else ''}\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
         bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
 
         try:
