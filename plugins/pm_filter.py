@@ -545,7 +545,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not files_:
             return await query.answer('Nᴏ sᴜᴄʜ ғɪʟᴇ ᴇxɪsᴛ.')
         files = files_[0]
-        title = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|srt|\~|\©|\_|\.)", " ", files.file_name, flags=re.IGNORECASE).strip()
+        title = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|srt|\~|\©|\+|\_|\.)", " ", files.file_name, flags=re.IGNORECASE).strip()
         target_emoji = "🔞"
         if target_emoji in title:
             ident = "filep"
@@ -561,13 +561,27 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 title = "None"
                 await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=file_id, caption="check the file")
+        try:
+            title2 = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|srt|https?://\S+|www\.\S+|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+        except:
+            title2 = "None"
+        chk = f"{title} {title2}".lower()
+        short_to_full_map = {'tam': 'Tamil', 'tel': 'Telugu', 'hin': 'Hindi', 'eng': 'English', 'mal': 'Malayalam'}
+        for old_word, new_word in short_to_full_map.items():
+            chk = chk.replace(old_word, new_word)
+        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean)\b", chk, re.IGNORECASE)
+        if language:
+            myrlist = list(dict.fromkeys(language))
+            ress = ', '.join(myrlist)
+            resss = ress.title()
+            language = f"<b>\n🔊 Audio : {resss}</b>"
         resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", title, re.IGNORECASE)
         if resolutions:
             mylist = list(dict.fromkeys(resolutions))
             res = ' '.join(mylist)
-            resolutions = f"<blockquote>🎥Quality : {res}</blockquote>"
+            resolutions = f"<b>\n🎥Quality : {res}</b>"
         settings = await get_settings(query.message.chat.id)
-        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code></blockquote> {f'{resolutions}' if resolutions else ''}\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
+        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>{f'{resolutions}' if resolutions else ''}{f'{language}' if language else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
         bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
 
         try:
