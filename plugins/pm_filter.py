@@ -150,7 +150,11 @@ async def next_page(bot, query):
         for file in files:
             sz = get_size(file.file_size)
             tt = file.file_name.title().lstrip()
-            fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
+            fg = re.sub(r"(_|\-|\.|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE)
+            try:
+                fn = fg.replace("  ", " ")
+            except:
+                fn = fg
             filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
             btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'files#{file.file_id}')])
     except:
@@ -539,7 +543,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not files_:
             return await query.answer('Nᴏ sᴜᴄʜ ғɪʟᴇ ᴇxɪsᴛ.')
         files = files_[0]
-        title = re.sub(r"(#|\@|\~|\©|\[|\]|\_|\.)", " ", files.file_name, flags=re.IGNORECASE)
+        title = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|srt|\~|\©|\_|\.)", " ", files.file_name, flags=re.IGNORECASE).strip()
         target_emoji = "🔞"
         if target_emoji in title:
             ident = "filep"
@@ -549,19 +553,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return
         
         size = get_size(files.file_size)
-        f_caption = files.caption
+        caption = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+        if title == "None":
+            title = caption 
+            
+        chk = f"{title}{caption}"
+        
         settings = await get_settings(query.message.chat.id)
-        if CUSTOM_FILE_CAPTION:
-            try:
-                f_caption = CUSTOM_FILE_CAPTION.format(file_name='' if title is None else title,
-                                                       file_size='' if size is None else size,
-                                                       file_caption='' if f_caption is None else f_caption)
-            except Exception as e:
-                logger.exception(e)
-            f_caption = f_caption
-        if f_caption is None:
-            f_caption = f"{files.file_name}"
-      
+        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code></blockquote> \n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
         bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
 
         try:
@@ -611,23 +610,15 @@ async def cb_handler(client: Client, query: CallbackQuery):
             message = query.message.reply_to_message
         except:
             buttons = []
-            buttons.append(
-                [InlineKeyboardButton(" 💒💒  ᴄʜᴀɴɴᴇʟ 💒💒 ", url="https://t.me/+R9zxAI4mCkk0NzVl")]
-            )
-            await query.edit_message_reply_markup( 
-                reply_markup=InlineKeyboardMarkup(buttons)
-            )
-            await asyncio.sleep(.3)
-            await query.answer("Once this movie is releas HDRip/OTT, it will be upload on the👇 💒channel \n\n\n ഈ സിനിമയുടെ HD/OTT ഇറങ്ങിയാൽ ഉടൻ ചുവടെ ഉള്ള 💒ചാനലിൽ അപ്‌ലോഡ് ചെയ്യുന്നതാണ്",show_alert=True)
+            await query.message.delete()
             return
-        
+            
         kuttons = []
         try:
             x = message.text.split()
         except:
-            kuttons.append(
-                [InlineKeyboardButton(text=f"ɢᴏᴏɢʟᴇ 🍿", url=f"https://google.com/search")]
-            )
+            await query.message.delete()
+            return
         else:
             hari = "+".join(x)
             kuttons.append(
@@ -1538,7 +1529,12 @@ async def auto_filter(client, msg, spoll=False):
         message = msg
         settings = await get_settings(message.chat.id)
         if message.text.startswith("/"): return  # ignore commands
-        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
+        if re.findall("((^\/|^,|^!|^[\U0001F600-\U000E007F]).*)", message.text):
+            await asyncio.sleep(3)
+            try:
+                await message.delete()
+            except:
+                pass
             return
         men = message.from_user.mention if message.from_user else "Anonymous" 
         if len(message.text) <= 3:
@@ -1551,7 +1547,7 @@ async def auto_filter(client, msg, spoll=False):
                 print(e)
                 return
         elif 3 < len(message.text) < 70:
-            pari = re.sub(r"(:|\'|\~|\-|\[|\]|\.|\,|\;|\_)", " ", message.text, flags=re.IGNORECASE)
+            pari = re.sub(r"(:|\'|\~|\-|[(]|[)]|\[|\]|\.|\,|\;|\_)", " ", message.text, flags=re.IGNORECASE)
             try:
                 search = pari.replace("  ", " ")
             except:
@@ -1636,7 +1632,11 @@ async def auto_filter(client, msg, spoll=False):
        for file in files:
            sz = get_size(file.file_size)
            tt = file.file_name.title().lstrip()
-           fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
+           fg = re.sub(r"(_|[(]|[)]|\-|\.|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE)
+           try:
+               fn = fg.replace("  ", " ")
+           except:
+               fn = fg
            filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
     except:
