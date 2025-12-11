@@ -566,7 +566,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             title2 = "None"
         chk = f"{title} {title2}".lower()
-        short_to_full_map = {'tam': 'Tamil', 'tel': 'Telugu', 'hin': 'Hindi', 'eng': 'English', 'mal': 'Malayalam'}
+        short_to_full_map = {'tam': 'tamil', 'tel': 'telugu', 'hin': 'hindi', 'eng': 'english', 'Multi': 'multi-audio✅', 'mal': 'malayalam'}
         for old_word, new_word in short_to_full_map.items():
             chk = chk.replace(old_word, new_word)
         language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean)\b", chk, re.IGNORECASE)
@@ -575,13 +575,18 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ress = ', '.join(myrlist)
             resss = ress.title()
             language = f"<b>\n🔊 Audio : {resss}</b>"
-        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", title, re.IGNORECASE)
+        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE)
         if resolutions:
             mylist = list(dict.fromkeys(resolutions))
             res = ' '.join(mylist)
-            resolutions = f"<b>\n🎥Quality : {res}</b>"
+            resolutions = f"<b>\n\n🎥Quality : {res}</b>"
+        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b", chk, re.IGNORECASE))
+        if duration:
+            myylist = list(dict.fromkeys(duration))
+            rees = ' '.join(myylist)
+            duration = f"<b>\n⏳ : {rees}</b>"
         settings = await get_settings(query.message.chat.id)
-        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>{f'{resolutions}' if resolutions else ''}{f'{language}' if language else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
+        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>{f'{resolutions}' if resolutions else ''}{f'{duration}' if duration else ''}{f'{language}' if language else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
         bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
 
         try:
