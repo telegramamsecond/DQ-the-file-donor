@@ -589,8 +589,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
             duration = f"<b>\n⏳ : {rees}</b>"
+        sub = re.findall(r"\b(e.?sub|eng.?sub|english.?sub|malayalam.?sub|multi.?sub|m.?sub|hin.?sub|japanese.?subs|hindi.?sub|mal.?sub)\b", chk, re.IGNORECASE)
         if sub:
-            sub = re.findall(r"\b(e.?sub|eng.?sub|english.?sub|malayalam.?sub|multi.?sub|m.?sub|hin.?sub|japanese.?subs|hindi.?sub|mal.?sub)\b", chk, re.IGNORECASE)
             short_too_full_map = {'sub': 'subtitle✅', 'subs': 'subtitle✅', 'hin': 'hindi', 'eng': 'english', 'multi': 'multiple', 'mal': 'malayalam'}
             mmyylist = list(dict.fromkeys(sub))
             rrees = ' '.join(mmyylist)
