@@ -114,7 +114,7 @@ async def pm_text(bot, message):
         text=f"<b>#𝐏𝐌_𝐌𝐒𝐆\n\nNᴀᴍᴇ : {user}\n\nID : {user_id}\n\nMᴇssᴀɢᴇ : {content}</b>"
     )"""
 
-@Client.on_callback_query(filters.regex(r"^next"))
+@Client.on_callback_query(filters.regex(r"^hhnext"))
 async def next_page(bot, query):
     ident, req, key, offset = query.data.split("_")
     clicked = query.from_user.id
@@ -1609,7 +1609,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
-                    await query.answer("❗️MessageNotModified❗️")
+                    await query.answer("❗️Message Not Modified❗️")
                 except Exception as e:
                     await query.answer()
                 return
@@ -1637,7 +1637,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
-                    await query.answer("❗️MessageNotModified❗️")
+                    await query.answer("❗️Message Not Modified❗️")
                 except Exception as e:
                     await query.answer()
                 return   
@@ -1651,8 +1651,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
-                    await query.answer("❗️MessageNotModified❗️")
-                except Exception as e:
+                    await query.answer("❗️Message Not Modified❗️")
+                except Exception as e: 
                     await query.answer()
                 return
 
