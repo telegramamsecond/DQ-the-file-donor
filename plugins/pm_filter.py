@@ -1570,8 +1570,97 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ]
             reply_markup = InlineKeyboardMarkup(buttons)
             await query.message.edit_reply_markup(reply_markup)
-    
-    
+
+    elif query.data.startswith("next"):
+        try:
+            ident, index, keyword = query.data.split("_")
+        except KeyError:
+            await query.answer(" You are using this for one of my old message, please send the request again ",show_alert=True)
+            await query.message.delete()
+            return
+        else:
+            try:
+                data = BUTTONS[keyword]
+            except KeyError:
+                await query.answer(" You are using this for one of my old message, please send the request again ",show_alert=True)
+                return
+            if int(index) == int(data["total"]) - 2:
+                buttons = data['buttons'][int(index)+1].copy()
+
+                buttons.append(
+                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪 {int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton(text="🕯️ ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+                )
+                """buttons.append(
+                    [InlineKeyboardButton(text="🍿𝚂𝙴𝙰𝚁𝙲𝙷 𝙸𝙽 𝙿𝙼🍿",callback_data=f"myree#")]
+                )"""
+                try:
+                    await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+                except MessageNotModified:
+                    await query.answer("❗️Message Not Modified❗️")
+                except Exception as e:
+                    await query.answer()
+                return
+            else:
+                buttons = data['buttons'][int(index)+1].copy()
+
+                buttons.append(
+                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{int(index)+1}_{keyword}")]
+                )
+                try:
+                    await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+                except MessageNotModified:
+                    await query.answer("❗️MessageNotModified❗️")
+                except Exception as e:
+                    await query.answer()
+                return
+    elif query.data.startswith("back"):
+        try:
+            ident, index, keyword = query.data.split("_")
+        except KeyError:
+            await query.answer(" You are using this for one of my old message, please send the request again ",show_alert=True)
+            await query.message.delete()
+            return
+        else:
+            try:
+                data = BUTTONS[keyword]
+            except KeyError:
+                await query.answer("You are using this for one of my old message, please send the request again.",show_alert=True)
+                return
+
+            if int(index) == 1:
+                buttons = data['buttons'][int(index)-1].copy()
+
+                buttons.append(
+                    [InlineKeyboardButton(f"🎪 Pages {int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]                   
+                )
+
+                try:
+                    await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+                except MessageNotModified:
+                    await query.answer("❗️MessageNotModified❗️")
+                except Exception as e:
+                    await query.answer()
+                return   
+            else:
+                buttons = data['buttons'][int(index)-1].copy()
+
+                buttons.append(
+                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ⇍", callback_data=f"back_{int(index)-1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]
+                )
+
+                try:
+                    await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
+                except MessageNotModified:
+                    await query.answer("❗️MessageNotModified❗️")
+                except Exception as e:
+                    await query.answer()
+                return
+
+def split_list(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i + n]          
+        n += 1
+        
 async def auto_filter(client, msg, spoll=False):
     reqstr1 = msg.from_user.id if msg.from_user else 0
     reqstr = await client.get_users(reqstr1)
@@ -1698,11 +1787,15 @@ async def auto_filter(client, msg, spoll=False):
             print(e)
         return
         
-    btn.insert(0, [
-        InlineKeyboardButton(" Cʜᴇᴄᴋ Bᴏᴛ PM ", url=f"https://t.me/{temp.U_NAME}")
-    ])
-
-    if offset != "":
+    
+    if len(btn) > 10: 
+        btns = list(split_list(btn, 10)) 
+        keyword = f"{message.chat.id}-{message_id}"
+        BUTTONS[keyword] = {
+            "total" : len(btns),
+            "buttons" : btns
+        }
+    """if offset != "":
         key = f"{message.chat.id}-{message.id}"
         BUTTONS[key] = search
         req = message.from_user.id if message.from_user else 0
@@ -1726,11 +1819,16 @@ async def auto_filter(client, msg, spoll=False):
             else:
                 btn.append(
                     [InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
-                )
+                )"""
     else:
         btn.append(
             [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
         )
+    data = BUTTONS[keyword]
+    btn = data['buttons'][0].copy()
+    btn.insert(0, [
+        InlineKeyboardButton(" Cʜᴇᴄᴋ Bᴏᴛ PM ", url=f"https://t.me/{temp.U_NAME}")
+    ])
     sch = search.strip()
     y = sch.split()
     x = "_".join(y)
