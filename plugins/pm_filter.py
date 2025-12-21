@@ -1704,7 +1704,7 @@ async def auto_filter(client, msg, spoll=False):
                 except:
                     xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=0, filter=True)
                 else:
-                    cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
+                    cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
                     try:
                         btn = nyvaa['buttons']
                     except:
@@ -1747,7 +1747,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"<b>I couldn't find anything related to your request. 🤧 </b><blockquote>Try reading the instructions below 👇</blockquote>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"<b>Hey {men}, I couldn't ❌ find anything related to your request </b><blockquote>📍 Try reading the instructions below 👇</blockquote>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
@@ -1795,6 +1795,10 @@ async def auto_filter(client, msg, spoll=False):
             "total" : len(btns),
             "buttons" : btns
         }
+    else:
+        btn.append(
+            [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+        )
     """if offset != "":
         key = f"{message.chat.id}-{message.id}"
         BUTTONS[key] = search
@@ -1820,10 +1824,7 @@ async def auto_filter(client, msg, spoll=False):
                 btn.append(
                     [InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                 )"""
-    else:
-        btn.append(
-            [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
-        )
+    
     data = BUTTONS[keyword]
     btn = data['buttons'][0].copy()
     btn.insert(0, [
