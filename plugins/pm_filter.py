@@ -1586,12 +1586,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 data = BUTTONS[keyword]
             except KeyError:
                 await query.answer(" You are using this for one of my old message, please send the request again ",show_alert=True)
-                return
+                return await query.message.delete()
             if int(index) == int(data["total"]) - 2:
                 buttons = data['buttons'][int(index)+1].copy()
 
                 buttons.append(
-                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪 {int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton(text="🕯️ ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+                    [InlineKeyboardButton("⇍ ʙᴀᴄᴋ ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪 {int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton(text="🕯️ ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                 )
                 """buttons.append(
                     [InlineKeyboardButton(text="🍿𝚂𝙴𝙰𝚁𝙲𝙷 𝙸𝙽 𝙿𝙼🍿",callback_data=f"myree#")]
@@ -1607,7 +1607,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 buttons = data['buttons'][int(index)+1].copy()
 
                 buttons.append(
-                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{int(index)+1}_{keyword}")]
+                    [InlineKeyboardButton("⇍ ʙᴀᴄᴋ ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ ɴᴇxᴛ ⇏", callback_data=f"next_{int(index)+1}_{keyword}")]
                 )
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
@@ -1631,13 +1631,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 data = BUTTONS[keyword]
             except KeyError:
                 await query.answer("You are using this for one of my old message, please send the request again.",show_alert=True)
-                return
+                return await query.message.delete()
 
             if int(index) == 1:
                 buttons = data['buttons'][int(index)-1].copy()
 
                 buttons.append(
-                    [InlineKeyboardButton(f"🎪 Pages {int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]                   
+                    [InlineKeyboardButton(f"🎪 Pages {int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ ɴᴇxᴛ ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]                   
                 )
 
                 try:
@@ -1646,12 +1646,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     await query.answer("❗️Message Not Modified❗️")
                 except Exception as e:
                     await query.answer()
-                return   
+                return 
             else:
                 buttons = data['buttons'][int(index)-1].copy()
 
                 buttons.append(
-                    [InlineKeyboardButton("⇍ʙᴀᴄᴋ⇍", callback_data=f"back_{int(index)-1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ɴᴇxᴛ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]
+                    [InlineKeyboardButton("⇍ ʙᴀᴄᴋ ⇍", callback_data=f"back_{int(index)-1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ ɴᴇxᴛ ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]
                 )
 
                 try:
@@ -1697,7 +1697,7 @@ async def auto_filter(client, msg, spoll=False):
                 search = pari.replace("  ", " ")
             except:
                 search = pari
-            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), max_results=150, offset=0, filter=True)
+            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), max_results=200, offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
@@ -1708,7 +1708,7 @@ async def auto_filter(client, msg, spoll=False):
                 try:
                     nyvaa = BUT[sessna]
                 except:
-                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), max_results=150, offset=0, filter=True)
+                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), max_results=200, offset=0, filter=True)
                 else:
                     cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
                     try:
@@ -1794,8 +1794,8 @@ async def auto_filter(client, msg, spoll=False):
         return
         
     
-    if len(btn) > 10: 
-        btns = list(split_list(btn, 10)) 
+    if len(btn) > 6: 
+        btns = list(split_list(btn, 6)) 
         keyword = f"{message.chat.id}-{message.id}"
         BUTTONS[keyword] = {
             "total" : len(btns),
@@ -1805,7 +1805,7 @@ async def auto_filter(client, msg, spoll=False):
         bttn = data['buttons'][0].copy()
         btn = bttn
         btn.append(
-            [InlineKeyboardButton(text=f"🎪 ᴩᴀɢᴇꜱ 1/{data['total']}🎪",callback_data="pages"),InlineKeyboardButton(text="⇏ ɴᴇxᴛ ⇏",callback_data=f"next_0_{keyword}")]
+            [InlineKeyboardButton("ᴩᴀɢᴇ", callback_data="pages"),InlineKeyboardButton(text=f"🎪 1/{data['total']} 🎪",callback_data="pages"),InlineKeyboardButton(text="⇏ ɴᴇxᴛ ⇏",callback_data=f"next_0_{keyword}")]
         )
     else:
         btn.append(
