@@ -584,7 +584,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 pass
             resolutions = f"<b>\n🎥Quality : {res}</b>"
-        duration = re.findall(r"(\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\d{2}h\d{2}m\d{2}s)", chk, re.IGNORECASE)
+        duration = re.findall(r"(\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\b\d{2}h\d{2}m\d{2}s\b)", chk, re.IGNORECASE)
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
@@ -1610,7 +1610,7 @@ async def auto_filter(client, msg, spoll=False):
                     except:
                         BUT.pop(f"{sessna}")
                     else:
-                        fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                        fuk = await message.reply_text(text=cap[:1024], reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                         files, offset, total_results = await get_search_results(message.chat.id, query.lower(), offset=0, filter=True)
                         if int(total_results) != int(nyvaa['total']):
                             BUT.pop(f"{sessna}")
@@ -1776,7 +1776,7 @@ async def auto_filter(client, msg, spoll=False):
             if message.chat.id == SUPPORT_CHAT_ID:
                 await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. Kɪɴᴅʟʏ ᴜsᴇ ɪɴʟɪɴᴇ sᴇᴀʀᴄʜ ᴏʀ ᴍᴀᴋᴇ ᴀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴀᴅᴅ ᴍᴇ ᴀs ᴀᴅᴍɪɴ ᴛᴏ ɢᴇᴛ ᴍᴏᴠɪᴇ ғɪʟᴇs. Tʜɪs ɪs ᴀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ sᴏ ᴛʜᴀᴛ ʏᴏᴜ ᴄᴀɴ'ᴛ ɢᴇᴛ ғɪʟᴇs ғʀᴏᴍ ʜᴇʀᴇ...\n\nFᴏʀ Mᴏᴠɪᴇs, Jᴏɪɴ @free_movies_all_languages</b>")
             else:
-                hehe = await message.reply_text(text=cap[:1024], reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
+                hehe = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
                 try:
                     if settings['auto_delete']:
                         await asyncio.sleep(300)
@@ -1851,7 +1851,7 @@ async def auto_filter(client, msg, spoll=False):
         if message.chat.id == SUPPORT_CHAT_ID:
             await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. Kɪɴᴅʟʏ ᴜsᴇ ɪɴʟɪɴᴇ sᴇᴀʀᴄʜ ᴏʀ ᴍᴀᴋᴇ ᴀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴀᴅᴅ ᴍᴇ ᴀs ᴀᴅᴍɪɴ ᴛᴏ ɢᴇᴛ ᴍᴏᴠɪᴇ ғɪʟᴇs. Tʜɪs ɪs ᴀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ sᴏ ᴛʜᴀᴛ ʏᴏᴜ ᴄᴀɴ'ᴛ ɢᴇᴛ ғɪʟᴇs ғʀᴏᴍ ʜᴇʀᴇ...\n\nFᴏʀ Mᴏᴠɪᴇs, Jᴏɪɴ </b>")
         else:
-            hehe = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            hehe = await message.reply_text(text=cap[:1024], reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(300)
