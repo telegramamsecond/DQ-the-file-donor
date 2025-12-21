@@ -67,9 +67,9 @@ async def save_file(media):
 
 
 
-async def get_search_results(chat_id, query, file_type=None, max_results=10, offset=0, filter=False):
+async def get_search_results(chat_id, query, file_type=None, max_results=200, offset=0, filter=False):
     """For given query return (results, next_offset)"""
-    if chat_id is not None:
+    """if chat_id is not None:
         settings = await get_settings(int(chat_id))
         try:
             if settings['max_btn']:
@@ -82,7 +82,7 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
             if settings['max_btn']:
                 max_results = 10
             else:
-                max_results = int(MAX_B_TN)
+                max_results = int(MAX_B_TN)"""
     query = query.strip()
     #if filter:
         #better ?
