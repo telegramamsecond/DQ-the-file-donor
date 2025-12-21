@@ -584,7 +584,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 pass
             resolutions = f"<b>\n🎥Quality : {res}</b>"
-        duration = re.findall(r"(\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\b\d{2}h\d{2}m\d{2}s\b)", chk, re.IGNORECASE)
+        duration = re.findall(r"(\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\b(\d+h)?(\d+m)?(\d+s)?\b)", chk, re.IGNORECASE)
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
@@ -716,9 +716,20 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 fn = re.sub(r"(_|\-|\.|\#|\@|\+)", " ", tt, flags=re.IGNORECASE)
                 filenaame = f"{oamm} {fn}"
                 btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f"pmx₹{file}")])
-        if len(btn) > 8:
-            btn = btn[:8]      
-        btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
+        try:
+            ident, go = query.data.split("_")
+        except:
+            if len(btn) > 8:
+                btn = btn[:8]  
+                btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('ɴᴇxᴛ ⇏', callback_data='recent_next')])
+            else:
+                btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
+        else:
+            if len(btn) > 8:
+                btn = btn[8:18]  
+                btn.append([InlineKeyboardButton('⇍ ʙᴀᴄᴋ', callback_data='recent'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
+            else:
+                btn.append([InlineKeyboardButton('Hᴏᴍᴇ 🏠', callback_data='start'), InlineKeyboardButton('Cʟᴏsᴇ', callback_data='instr_close')])
         reply_markup = InlineKeyboardMarkup(btn)
         try:
             await query.message.edit_text(text="Select any recent file 👇", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
