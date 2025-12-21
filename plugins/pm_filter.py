@@ -1572,6 +1572,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
 
     elif query.data.startswith("next"):
+        if clicked != typed:
+            await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+            return
         try:
             ident, index, keyword = query.data.split("_")
         except KeyError:
@@ -1614,6 +1617,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     await query.answer()
                 return
     elif query.data.startswith("back"):
+        if clicked != typed:
+            await query.answer(f"Hᴇʏ {query.from_user.first_name}, Tʜɪs Is Nᴏᴛ Yᴏᴜʀ Mᴏᴠɪᴇ Rᴇǫᴜᴇsᴛ. Rᴇǫᴜᴇsᴛ Yᴏᴜʀ's !", show_alert=True)
+            return
         try:
             ident, index, keyword = query.data.split("_")
         except KeyError:
@@ -1796,10 +1802,14 @@ async def auto_filter(client, msg, spoll=False):
             "buttons" : btns
         }
         data = BUTTONS[keyword]
-        btn = data['buttons'][0].copy()
+        bttn = data['buttons'][0].copy()
+        btn = bttn
+        btn.append(
+            [InlineKeyboardButton(text=f"🎪 ᴩᴀɢᴇꜱ 1/{data['total']}🎪",callback_data="pages"),InlineKeyboardButton(text="⇏ ɴᴇxᴛ ⇏",callback_data=f"next_0_{keyword}")]
+        )
     else:
         btn.append(
-            [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
+            [InlineKeyboardButton("💡 ᴄʟᴏꜱᴇ", callback_data="instr_close")]
         )
     """if offset != "":
         key = f"{message.chat.id}-{message.id}"
