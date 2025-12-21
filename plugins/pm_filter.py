@@ -1691,7 +1691,7 @@ async def auto_filter(client, msg, spoll=False):
                 search = pari.replace("  ", " ")
             except:
                 search = pari
-            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
+            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=150, filter=True)
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
@@ -1702,7 +1702,7 @@ async def auto_filter(client, msg, spoll=False):
                 try:
                     nyvaa = BUT[sessna]
                 except:
-                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=0, filter=True)
+                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=150, filter=True)
                 else:
                     cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
                     try:
@@ -1747,7 +1747,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton(text="ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                     )
                     reply_markup = InlineKeyboardMarkup(kuttons)
-                    kk = await message.reply_text(f"<b>Hey {men}, I couldn't ❌ find anything related to your request </b><blockquote>📍 Try reading the instructions below 👇</blockquote>", reply_markup=reply_markup)
+                    kk = await message.reply_text(f"<b>Hey {men}, I couldn't ❌ find anything related to your request </b>\n\n<blockquote>📍 Try reading the instructions below 👇</blockquote>", reply_markup=reply_markup)
                     await asyncio.sleep(150)
                     await kk.delete()
                     try:
