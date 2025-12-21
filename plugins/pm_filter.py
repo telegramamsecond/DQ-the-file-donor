@@ -61,7 +61,7 @@ async def give_filter(client, message):
         except:
             BUT.pop(f"{sesna}")
         else:
-            fuk = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            fuk = await message.reply_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
             files, offset, total_results = await get_search_results(message.chat.id, search.lower(), offset=0, filter=True)
             if int(total_results) != int(nyva['total']):
                 BUT.pop(f"{sesna}")
@@ -545,7 +545,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not files_:
             return await query.answer('Nᴏ sᴜᴄʜ ғɪʟᴇ ᴇxɪsᴛ.')
         files = files_[0]
-        title = re.sub(r"(#|\B@\w+|mkv|mp4|avi|srt|\~|\©|\-|\_|\.)", " ", files.file_name, flags=re.IGNORECASE).strip()
+        title = re.sub(r"(#|\B@\w+|\~|\©|\-|\_|\.)", " ", files.file_name, flags=re.IGNORECASE).strip()
         target_emoji = "🔞"
         if target_emoji in title:
             ident = "filep"
@@ -557,7 +557,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         size = get_size(files.file_size)
         if title == "None":
             try:
-                title = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|srt|https?://\S+|www\.\S+|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+                title = re.sub(r"(#|\B@\w+|\[.*?\]|https?://\S+|www\.\S+|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
             except:
                 title = "None"
                 await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=file_id, caption="check the file")
@@ -569,7 +569,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         for old_word, new_word in short_to_full_map.items():
             titfle = title.replace(old_word, new_word)
         chk = f"{titfle} {title2}".lower()
-        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean)\b", chk, re.IGNORECASE)
+        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean|french|italian|polish|portuguese|catalan|czech|danish|greek|basque|filipino|finnish|galician|hebrew|croatian|hungarian|malay|norwegian|bokmål|dutch|romanian|swedish|thai|turkish|ukrainian|vietnamese)\b", chk, re.IGNORECASE)
         if language:
             myrlist = list(dict.fromkeys(language))
             ress = ', '.join(myrlist)
@@ -583,8 +583,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 title = title.replace(res, "")
             except:
                 pass
-            resolutions = f"<b>\n\n🎥Quality : {res}</b>"
-        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b", chk, re.IGNORECASE)
+            resolutions = f"<b>\n🎥Quality : {res}</b>"
+        duration = re.findall(r"(\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\d{2}h\d{2}m\d{2}s)", chk, re.IGNORECASE)
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
@@ -596,9 +596,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             for old_worrd, new_worrd in short_too_full_map.items():
                 if sub == old_worrd:
                     sub = sub.replace(old_worrd, new_worrd) 
-            sub = f"<b>\n\n{sub[:-3]} subtitle✅</b>".title()
+            sub = f"<b>\n{sub[:-3]} subtitle✅</b>".title()
         settings = await get_settings(query.message.chat.id)
-        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>{f'{resolutions}' if resolutions else ''}{f'{duration}' if duration else ''}{f'{language}' if language else ''}{f'{sub}' if sub else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
+        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>\n{f'{resolutions}' if resolutions else ''}{f'{duration}' if duration else ''}{f'{language}' if language else ''}{f'{sub}' if sub else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
         bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
 
         try:
@@ -1776,7 +1776,7 @@ async def auto_filter(client, msg, spoll=False):
             if message.chat.id == SUPPORT_CHAT_ID:
                 await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. Kɪɴᴅʟʏ ᴜsᴇ ɪɴʟɪɴᴇ sᴇᴀʀᴄʜ ᴏʀ ᴍᴀᴋᴇ ᴀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴀᴅᴅ ᴍᴇ ᴀs ᴀᴅᴍɪɴ ᴛᴏ ɢᴇᴛ ᴍᴏᴠɪᴇ ғɪʟᴇs. Tʜɪs ɪs ᴀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ sᴏ ᴛʜᴀᴛ ʏᴏᴜ ᴄᴀɴ'ᴛ ɢᴇᴛ ғɪʟᴇs ғʀᴏᴍ ʜᴇʀᴇ...\n\nFᴏʀ Mᴏᴠɪᴇs, Jᴏɪɴ @free_movies_all_languages</b>")
             else:
-                hehe = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+                hehe = await message.reply_text(text=cap[:1024], reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
                 try:
                     if settings['auto_delete']:
                         await asyncio.sleep(300)
@@ -1852,24 +1852,6 @@ async def auto_filter(client, msg, spoll=False):
             await message.reply_text(f"<b>Hᴇʏ {message.from_user.mention}, {str(total_results)} ʀᴇsᴜʟᴛs ᴀʀᴇ ғᴏᴜɴᴅ ɪɴ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ғᴏʀ ʏᴏᴜʀ ᴏ̨ᴜᴇʀʏ {search}. Kɪɴᴅʟʏ ᴜsᴇ ɪɴʟɪɴᴇ sᴇᴀʀᴄʜ ᴏʀ ᴍᴀᴋᴇ ᴀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴀᴅᴅ ᴍᴇ ᴀs ᴀᴅᴍɪɴ ᴛᴏ ɢᴇᴛ ᴍᴏᴠɪᴇ ғɪʟᴇs. Tʜɪs ɪs ᴀ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ sᴏ ᴛʜᴀᴛ ʏᴏᴜ ᴄᴀɴ'ᴛ ɢᴇᴛ ғɪʟᴇs ғʀᴏᴍ ʜᴇʀᴇ...\n\nFᴏʀ Mᴏᴠɪᴇs, Jᴏɪɴ </b>")
         else:
             hehe = await message.reply_photo(photo=f"{random.choice(PHOTT)}", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
-            try:
-                btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.link}"), InlineKeyboardButton("ᴩᴍ", callback_data=f"pmx₹{sesna}")]]
-                reply_markup = InlineKeyboardMarkup(btn2)
-                pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below links to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                await asyncio.sleep(25)
-                await pk.delete()
-            except UserIsBlocked:
-                pass
-            except:
-                try:
-                    btn2 = [[InlineKeyboardButton("ᴠɪᴇᴡ ɪɴ ɢʀᴏᴜᴩ", url=f"{hehe.link}")]]
-                except:
-                    pass
-                else:
-                    reply_markup = InlineKeyboardMarkup(btn2)
-                    pk = await client.send_message(chat_id=message.from_user.id, text=f"<b>Hᴇʏ {message.from_user.mention}, your files are ready🥂\n click the below link to access files </b>", reply_markup=reply_markup, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                    await asyncio.sleep(19)
-                    await pk.delete()
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(300)
