@@ -1795,6 +1795,8 @@ async def auto_filter(client, msg, spoll=False):
             "total" : len(btns),
             "buttons" : btns
         }
+        data = BUTTONS[keyword]
+        btn = data['buttons'][0].copy()
     else:
         btn.append(
             [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="instr_close")]
@@ -1825,8 +1827,6 @@ async def auto_filter(client, msg, spoll=False):
                     [InlineKeyboardButton("𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                 )"""
     
-    data = BUTTONS[keyword]
-    btn = data['buttons'][0].copy()
     btn.insert(0, [
         InlineKeyboardButton(" Cʜᴇᴄᴋ Bᴏᴛ PM ", url=f"https://t.me/{temp.U_NAME}")
     ])
