@@ -1697,7 +1697,7 @@ async def auto_filter(client, msg, spoll=False):
                 search = pari.replace("  ", " ")
             except:
                 search = pari
-            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=150, filter=True)
+            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), max_results=150, offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
@@ -1708,7 +1708,7 @@ async def auto_filter(client, msg, spoll=False):
                 try:
                     nyvaa = BUT[sessna]
                 except:
-                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), offset=150, filter=True)
+                    xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), max_results=150, offset=0, filter=True)
                 else:
                     cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
                     try:
