@@ -39,7 +39,7 @@ BUTTONS = {}
 BUT = {}
 SPELL_CHECK = {}
 RESEND = {}
-RAT = ["🦋", "🌸", "🦄", "🎈", "🥀", "🌻", "🍭", "🍿", "🪁", "🗼", "🪗", "🎬", "❤️‍🔥",]
+RAT = ["🍫", "🍟", "🍓", "🎈", "🍹", "🌻", "🍭", "🍿", "🪁", "🗼", "📮", "🎬", "🧯",]
 PHOTT = ["https://telegra.ph/file/9075ca7cbad944afaa823.jpg", "https://telegra.ph/file/9688c892ad2f2cf5c3f68.jpg", "https://telegra.ph/file/51683050f583af4c81013.jpg",]
 
 
@@ -1777,14 +1777,19 @@ async def auto_filter(client, msg, spoll=False):
        for file in files:
            sz = get_size(file.file_size)
            tt = file.file_name.title().lstrip()
-           fg = re.sub(r"(_|[(]|[)]|\-|\.|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE)
+           if tt == "None":
+               tt = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", file.caption, flags=re.IGNORECASE).strip()
+           fg = re.sub(r"(_|[(]|[)]|\-|\.|[Ss]\d{2}.?[Ee]\d{2}|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE).strip()
+           seepp = re.findall(r"[Ss]\d{2}.?[Ee]\d{2}", tt, re.IGNORECASE)
            try:
                fn = fg.replace("  ", " ")
            except:
                fn = fg
-           if fn == "None":
-               fn = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", file.caption, flags=re.IGNORECASE).strip()
-           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
+           if seepp:
+               sseepp = seepp.replace(" ", "")
+               filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}[{sseepp}]{fn}"
+           else:
+               filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
     except:
         try:
