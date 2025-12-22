@@ -1780,7 +1780,7 @@ async def auto_filter(client, msg, spoll=False):
            if tt == "None":
                tt = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", file.caption, flags=re.IGNORECASE).strip()
            fg = re.sub(r"(_|[(]|[)]|\-|\.|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE).strip()
-           seepp = re.findall(r"([Ss]\d{2}.?[Ee]\d{2}|[Ss]\d{1}.?[Ee]\d{2})", tt, re.IGNORECASE)
+           seepp = re.findall(r"([s]\d{2}.?[e]\d{2}|[s]\d{1}.?[e]\d{2})", tt, re.IGNORECASE)
            try:
                fn = fg.replace("  ", " ")
            except:
@@ -1791,7 +1791,7 @@ async def auto_filter(client, msg, spoll=False):
                except:
                    sseepp = seepp
                fn = fn.replace(seepp, "")
-               filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}◢{sseepp}◤{fn}"
+               filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}[{sseepp}]{fn}"
            else:
                filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
