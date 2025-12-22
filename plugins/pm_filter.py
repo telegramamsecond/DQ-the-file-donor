@@ -1780,21 +1780,11 @@ async def auto_filter(client, msg, spoll=False):
            if tt == "None":
                tt = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", file.caption, flags=re.IGNORECASE).strip()
            fg = re.sub(r"(_|[(]|[)]|\-|\.|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE).strip()
-           seepp = re.findall(r"\b([s]\d{2}.?[e]\d{2}|[s]\d{1}.?[e]\d{2})\b", tt, re.IGNORECASE)
            try:
                fn = fg.replace("  ", " ")
            except:
                fn = fg
-           if seepp:
-               fn = fn.replace(seepp, "")
-               
-               try:
-                   sseepp = seepp.replace(" ", "")
-               except:
-                   sseepp = seepp
-               filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}[{sseepp}]{fn}"
-           else:
-               filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
+           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
     except:
         try:
