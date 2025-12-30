@@ -584,7 +584,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             except:
                 pass
             resolutions = f"<b>\n🎥Quality : {res}</b>"
-        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b", chk, re.IGNORECASE)
+        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\s\d.*h\d.*m\d.*s\s|\d.*h\d.*m\s", chk, re.IGNORECASE)
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
@@ -1778,13 +1778,14 @@ async def auto_filter(client, msg, spoll=False):
            sz = get_size(file.file_size)
            tt = file.file_name.title().lstrip()
            if tt == "None":
-               tt = re.sub(r"(#|\B@\w+|\[.*?\]|mkv|mp4|avi|https?://\S+|www\.\S+|srt|\~|\©|\_|\.)", " ", file.caption, flags=re.IGNORECASE).strip()
-           fg = re.sub(r"(_|[(]|[)]|\-|\.|\#|\B@\w+|\[.*?\]|\+)", " ", tt, flags=re.IGNORECASE).strip()
+               tt = file.caption.lstrip()
+           season = re.findall(r"\s[Ss]\d.*[Ee]\d.*\s", tt, re.IGNORECASE).strip()
+           fg = re.sub(r"(_|\~|\©|\®|\-|\.|\#|\s[Ss]\d.*[Ee]\d.*\s|\B@\w+|https?://\S+|www\.\S+|\[.*?\]|[(]|[)]|\+)", " ", tt, flags=re.IGNORECASE).strip()
            try:
                fn = fg.replace("  ", " ")
            except:
                fn = fg
-           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
+           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{f'{season}' if season else ''}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
     except:
         try:
