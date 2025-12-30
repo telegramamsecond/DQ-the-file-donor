@@ -1779,8 +1779,8 @@ async def auto_filter(client, msg, spoll=False):
            tt = file.file_name.title().lstrip()
            if tt == "None":
                tt = file.caption.lstrip()
-           # season = re.findall(r"\s[Ss]\d.*[Ee]\d.*\s", tt, re.IGNORECASE).strip()
-           fg = re.sub(r"(_|\~|\©|\®|\-|\.|\#|\s[Ss]\d.*[Ee]\d.*\s|\B@\w+|https?://\S+|www\.\S+|\[.*?\]|[(]|[)]|\+)", " ", tt, flags=re.IGNORECASE).strip()
+           season = re.findall(r"\ss\d.*e\d.*\s", tt, re.IGNORECASE).strip()
+           fg = re.sub(r"(_|\~|\©|\®|\-|\.|\#|\ss\d.*e\d.*\s|\B@\w+|https?://\S+|www\.\S+|\[.*?\]|[(]|[)]|\+)", " ", tt, flags=re.IGNORECASE).strip()
            try:
                fn = fg.replace("  ", " ")
            except:
