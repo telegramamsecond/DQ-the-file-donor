@@ -1779,17 +1779,12 @@ async def auto_filter(client, msg, spoll=False):
            tt = file.file_name.title().lstrip()
            if tt == "None":
                tt = file.caption.lstrip()
-           season = re.findall(r"\ss\d.*e\d.*\s", tt, re.IGNORECASE).strip()
-           if season:
-               myylist = list(dict.fromkeys(season))
-               rees = ' '.join(myylist)
-               duration = f"|{rees}|"
-           fg = re.sub(r"(_|\~|\©|\®|\-|\.|\#|\ss\d.*e\d.*\s|\B@\w+|https?://\S+|www\.\S+|\[.*?\]|[(]|[)]|\+)", " ", tt, flags=re.IGNORECASE).strip()
+           fg = re.sub(r"(_|\~|\©|\®|\-|\.|\#|\B@\w+|https?://\S+|www\.\S+|\[.*?\]|[(]|[)]|\+)", " ", tt, flags=re.IGNORECASE).strip()
            try:
                fn = fg.replace("  ", " ")
            except:
                fn = fg
-           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{f'{duration}' if season else ''}{fn}"
+           filenaame = f"{oam}{sz[0:3]} {sz[-2:]}{oamm}{fn}"
            btn.append([InlineKeyboardButton(text=f"{filenaame}",callback_data=f'{pre}#{file.file_id}')])
     except:
         try:
