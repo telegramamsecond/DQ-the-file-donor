@@ -588,7 +588,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 resolutions = f"<b>\n🎥Quality : {res} [ʜᴇᴠᴄ💡]</b>"
             else:
                 resolutions = f"<b>\n🎥Quality : {res}</b>"
-        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\s\dh\d.*m\d.*s\s|\dh\d.*m\s", chk, re.IGNORECASE).strip()
+        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\s\dh\d.*m\d.*s\s|\dh\d.*m\s", chk, re.IGNORECASE)
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
