@@ -545,7 +545,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not files_:
             return await query.answer('Nᴏ sᴜᴄʜ ғɪʟᴇ ᴇxɪsᴛ.')
         files = files_[0]
-        title = re.sub(r"(#|\B@\w+|\~|\©|\-|\_|\.)", " ", files.file_name, flags=re.IGNORECASE).strip()
+        title = re.sub(r"(#|\B@\w+|\~|\©|\-|\_|\.|\@)", " ", files.file_name, flags=re.IGNORECASE).strip()
         target_emoji = "🔞"
         if target_emoji in title:
             ident = "filep"
@@ -557,12 +557,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         size = get_size(files.file_size)
         if title == "None":
             try:
-                title = re.sub(r"(#|\B@\w+|\[.*?\]|https?://\S+|www\.\S+|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+                title = re.sub(r"(#|\B@\w+|\[.*?\]|https?://\S+|www\.\S+|\~|\©|\_|\.|\@)", " ", files.caption, flags=re.IGNORECASE).strip()
             except:
                 title = "None"
                 await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=file_id, caption="check the file")
         try:
-            title2 = re.sub(r"(#|\B@\w+|mkv|mp4|avi|srt|\~|\©|\_|\.)", " ", files.caption, flags=re.IGNORECASE).strip()
+            title2 = re.sub(r"(#|\B@\w+|mkv|mp4|avi|srt|\~|\©|\_|\.|\@)", " ", files.caption, flags=re.IGNORECASE).strip()
         except:
             title2 = "None"
         short_to_full_map = {'tam': 'tamil', 'tel': 'telugu', 'hin': 'hindi', 'eng': 'english', 'multi': 'multi-audio✅', 'mal': 'malayalam'}
@@ -583,12 +583,16 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 title = title.replace(res, "")
             except:
                 pass
-            resolutions = f"<b>\n🎥Quality : {res}</b>"
-        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\s\d.*h\d.*m\d.*s\s|\d.*h\d.*m\s", chk, re.IGNORECASE)
+            mach = "hevc"
+            if mach in chk:
+                resolutions = f"<b>\n🎥Quality : {res} [ʜᴇᴠᴄ💡]</b>"
+            else:
+                resolutions = f"<b>\n🎥Quality : {res}</b>"
+        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\s\dh\d.*m\d.*s\s|\dh\d.*m\s", chk, re.IGNORECASE).strip()
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
-            duration = f"<b>\n⏳ : {rees}</b>"
+            duration = f"<b>\n⏳ : {rees}</b>".title()
         sub = re.findall(r"\b(\be.?sub|eng.?sub|english.?sub|malayalam.?sub|multi.?sub|\bm.?sub|hin.?sub|japanese.?subs|hindi.?sub|\bmal.?sub)\b", chk, re.IGNORECASE)
         if sub:
             sub = sub[0].replace(" ", "")
@@ -1593,9 +1597,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 buttons.append(
                     [InlineKeyboardButton("⇍ ʙᴀᴄᴋ ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪 {int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton(text="🕯️ ᴄʟᴏꜱᴇ", callback_data="instr_close")]
                 )
-                """buttons.append(
-                    [InlineKeyboardButton(text="🍿𝚂𝙴𝙰𝚁𝙲𝙷 𝙸𝙽 𝙿𝙼🍿",callback_data=f"myree#")]
-                )"""
+                buttons.insert(0, [InlineKeyboardButton("⚡ Cʜᴇᴄᴋ Bᴏᴛ PM ⚡", url=f"https://t.me/{temp.U_NAME}")])
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
@@ -1609,6 +1611,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 buttons.append(
                     [InlineKeyboardButton("⇍ ʙᴀᴄᴋ ⇍", callback_data=f"back_{int(index)+1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)+2}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ ɴᴇxᴛ ⇏", callback_data=f"next_{int(index)+1}_{keyword}")]
                 )
+                buttons.insert(0, [InlineKeyboardButton("⚡ Cʜᴇᴄᴋ Bᴏᴛ PM ⚡", url=f"https://t.me/{temp.U_NAME}")])
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
@@ -1639,7 +1642,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 buttons.append(
                     [InlineKeyboardButton(f"🎪 Pages {int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ ɴᴇxᴛ ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]                   
                 )
-
+                buttons.insert(0, [InlineKeyboardButton("⚡ Cʜᴇᴄᴋ Bᴏᴛ PM ⚡", url=f"https://t.me/{temp.U_NAME}")])
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
@@ -1653,7 +1656,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 buttons.append(
                     [InlineKeyboardButton("⇍ ʙᴀᴄᴋ ⇍", callback_data=f"back_{int(index)-1}_{keyword}"),InlineKeyboardButton(f"🎪{int(index)}/{data['total']}🎪", callback_data="pages"),InlineKeyboardButton("⇏ ɴᴇxᴛ ⇏", callback_data=f"next_{int(index)-1}_{keyword}")]
                 )
-
+                buttons.insert(0, [InlineKeyboardButton("⚡ Cʜᴇᴄᴋ Bᴏᴛ PM ⚡", url=f"https://t.me/{temp.U_NAME}")])
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(buttons))
                 except MessageNotModified:
