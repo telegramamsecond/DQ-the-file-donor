@@ -1685,7 +1685,7 @@ async def auto_filter(client, msg, spoll=False):
                 pass
             return
         men = message.from_user.mention if message.from_user else "Anonymous" 
-        if len(message.text) <= 3:
+        if len(message.text) <= 2:
             kk = await message.reply_text(f"{men},ɪɴᴄʟᴜᴅᴇ ʏᴇᴀʀ ᴏғ ᴛʜᴇ ᴍᴏᴠɪᴇ. \n\n 𝚜𝚎𝚗𝚝👉 ᴍᴏᴠɪᴇ ɴᴀᴍᴇ & yᴇᴀʀ")
             await asyncio.sleep(20)
             await kk.delete()
@@ -1694,8 +1694,9 @@ async def auto_filter(client, msg, spoll=False):
             except Exception as e:
                 print(e)
                 return
-        elif 3 < len(message.text) < 70:
+        elif 2 < len(message.text) < 70:
             pari = re.sub(r"(:|\'|\~|\-|[(]|[)]|\[|\]|\.|\,|\;|\_)", " ", message.text, flags=re.IGNORECASE)
+            yinfo = "\n<blockquote>📍 ɪɴᴄʟᴜᴅᴇ ᴍᴏᴠɪᴇ ʏᴇᴀʀ ғᴏʀ ʙᴇᴛᴛᴇʀ ᴀᴄᴄᴜʀᴀᴄʏ</blockquote>"
             try:
                 search = pari.replace("  ", " ")
             except:
@@ -1713,7 +1714,7 @@ async def auto_filter(client, msg, spoll=False):
                 except:
                     xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), max_results=200, offset=0, filter=True)
                 else:
-                    cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>"
+                    cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>{f'{yinfo}' if len(query) <= 5 else ''}"
                     try:
                         btn = nyvaa['buttons']
                     except:
@@ -1767,6 +1768,10 @@ async def auto_filter(client, msg, spoll=False):
                         await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
                     return
         else:
+            try:
+                await message.delete()
+            except:
+                pass
             return
     else:
         settings = await get_settings(msg.message.chat.id)
@@ -1893,7 +1898,7 @@ async def auto_filter(client, msg, spoll=False):
         if mach1 in text_words or mach2 in text_words:
             cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>\n <blockquote>{SEEP}</blockquote>"
         else:
-            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>{f'{yinfo}' if len(search) <= 5 else ''}"
     if imdb and imdb.get('poster'):
         try:
             if message.chat.id == SUPPORT_CHAT_ID:
