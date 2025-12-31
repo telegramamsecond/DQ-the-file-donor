@@ -55,7 +55,8 @@ async def give_filter(client, message):
     except:
         pass
     else:
-        cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+        yinfo = "\n\n<blockquote>📍 ɪɴᴄʟᴜᴅᴇ ᴍᴏᴠɪᴇ ʏᴇᴀʀ ғᴏʀ ʙᴇᴛᴛᴇʀ ᴀᴄᴄᴜʀᴀᴄʏ</blockquote>"
+        cap = f"<b>Hᴇʏ 🙌{message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>{f'{yinfo}' if len(search) <= 5 else ''}"
         try:
             btn = nyva['buttons']
         except:
@@ -592,7 +593,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if duration:
             myylist = list(dict.fromkeys(duration))
             rees = ' '.join(myylist)
-            duration = f"<b>\n⏳ : {rees}</b>".title()
+            duration = f"<b>\n⏳ : {rees}</b>"
         sub = re.findall(r"\b(\be.?sub|eng.?sub|english.?sub|malayalam.?sub|multi.?sub|\bm.?sub|hin.?sub|japanese.?subs|hindi.?sub|\bmal.?sub)\b", chk, re.IGNORECASE)
         if sub:
             sub = sub[0].replace(" ", "")
@@ -1696,7 +1697,7 @@ async def auto_filter(client, msg, spoll=False):
                 return
         elif 2 < len(message.text) < 70:
             pari = re.sub(r"(:|\'|\~|\-|[(]|[)]|\[|\]|\.|\,|\;|\_)", " ", message.text, flags=re.IGNORECASE)
-            yinfo = "\n<blockquote>📍 ɪɴᴄʟᴜᴅᴇ ᴍᴏᴠɪᴇ ʏᴇᴀʀ ғᴏʀ ʙᴇᴛᴛᴇʀ ᴀᴄᴄᴜʀᴀᴄʏ</blockquote>"
+            yinfo = "\n\n<blockquote>📍 ɪɴᴄʟᴜᴅᴇ ᴍᴏᴠɪᴇ ʏᴇᴀʀ ғᴏʀ ʙᴇᴛᴛᴇʀ ᴀᴄᴄᴜʀᴀᴄʏ</blockquote>"
             try:
                 search = pari.replace("  ", " ")
             except:
@@ -1714,7 +1715,7 @@ async def auto_filter(client, msg, spoll=False):
                 except:
                     xiles, xffset, xotal_results = await get_search_results(message.chat.id ,query.lower(), max_results=200, offset=0, filter=True)
                 else:
-                    cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>{f'{yinfo}' if len(query) <= 5 else ''}"
+                    cap = f"<b>Hᴇʏ 🙌{men}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {query}.</b>{f'{yinfo}' if len(query) <= 4 else ''}"
                     try:
                         btn = nyvaa['buttons']
                     except:
@@ -1898,7 +1899,7 @@ async def auto_filter(client, msg, spoll=False):
         if mach1 in text_words or mach2 in text_words:
             cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>\n <blockquote>{SEEP}</blockquote>"
         else:
-            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>{f'{yinfo}' if len(search) <= 5 else ''}"
+            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>{f'{yinfo}' if len(search) <= 4 else ''}"
     if imdb and imdb.get('poster'):
         try:
             if message.chat.id == SUPPORT_CHAT_ID:
