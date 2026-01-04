@@ -274,7 +274,6 @@ async def start(client, message):
                 if sub == old_worrd:
                     sub = sub.replace(old_worrd, new_worrd) 
             sub = f"<b>\n{sub[:-3]} subtitle✅</b>".title()
-        settings = await get_settings(query.message.chat.id)
         f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>\n{f'{resolutions}' if resolutions else ''}{f'{duration}' if duration else ''}{f'{language}' if language else ''}{f'{sub}' if sub else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
         
     bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
