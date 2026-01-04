@@ -221,21 +221,62 @@ async def start(client, message):
         except:
             pass
         return await message.reply('No such file exist.')
-    files = files_[0]
-    title = re.sub(r"(#|\@|\~|\©|\[|\]|\_|\.)", " ", files.file_name, flags=re.IGNORECASE)
-    target_emoji = "🔞"
-    if target_emoji in title:
-        ident = "filep"
-    size=get_size(files.file_size)
-    f_caption=files.caption
-    if CUSTOM_FILE_CAPTION:
+    else:
+        files = files_[0]
+        title = re.sub(r"(#|\B@\w+|\~|\©|\[|\]|\_|\.|\@)", " ", files.file_name, flags=re.IGNORECASE)
+        target_emoji = "🔞"
+        if target_emoji in title:
+            ident = "filep"
+        size=get_size(files.file_size)
+        if title == "None":
+            try:
+                title = re.sub(r"(#|\B@\w+|\[.*?\]|https?://\S+|www\.\S+|\~|\©|\_|\.|\@)", " ", files.caption, flags=re.IGNORECASE).strip()
+            except:
+                title = "None"
+                await client.send_cached_media(chat_id=LOG_CHANNEL, file_id=file_id, caption="check the file")
         try:
-            f_caption=CUSTOM_FILE_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='' if f_caption is None else f_caption)
-        except Exception as e:
-            logger.exception(e)
-            f_caption=f_caption
-    if f_caption is None:
-        f_caption = f"{files.file_name}"
+            title2 = re.sub(r"(#|\B@\w+|mkv|mp4|avi|srt|\~|\©|\_|\.|\@)", " ", files.caption, flags=re.IGNORECASE).strip()
+        except:
+            title2 = "None"
+        short_to_full_map = {'tam': 'tamil', 'tel': 'telugu', 'hin': 'hindi', 'eng': 'english', 'multi': 'multi-audio✅', 'mal': 'malayalam'}
+        for old_word, new_word in short_to_full_map.items():
+            titfle = title.replace(old_word, new_word)
+        chk = f"{titfle} {title2}".lower()
+        language = re.findall(r"\b(arabic|english|hindi|tamil|telugu|assamese|bengali|gujarati|kannada|kashmiri|konkani|malayalam|manipuri|marathi|nepali|odia|punjabi|sanskrit|santali|sindhi|chinese|spanish|russian|urdu|indonesian|german|japanese|korean|french|italian|polish|portuguese|catalan|czech|danish|greek|basque|filipino|finnish|galician|hebrew|croatian|hungarian|malay|norwegian|bokmål|dutch|romanian|swedish|thai|turkish|ukrainian|vietnamese)\b", chk, re.IGNORECASE)
+        if language:
+            myrlist = list(dict.fromkeys(language))
+            ress = ', '.join(myrlist)
+            resss = ress.title()
+            language = f"<b>\n🔊 Audio : {resss}</b>"
+        resolutions = re.findall(r"\b(144p|240p|360p|540p|1440p|480p|720p|1080p|2160p)\b", chk, re.IGNORECASE)
+        if resolutions:
+            mylist = list(dict.fromkeys(resolutions))
+            res = ' '.join(mylist)
+            try:
+                title = title.replace(res, "")
+            except:
+                pass
+            mach = "hevc"
+            if mach in chk:
+                resolutions = f"<b>\n🎥Quality : {res} [ʜᴇᴠᴄ💡]</b>"
+            else:
+                resolutions = f"<b>\n🎥Quality : {res}</b>"
+        duration = re.findall(r"\b(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\b|\s\dh\d.*m\d.*s\s|\dh\d.*m\s", chk, re.IGNORECASE)
+        if duration:
+            myylist = list(dict.fromkeys(duration))
+            rees = ' '.join(myylist)
+            duration = f"<b>\n⏳ : {rees}</b>"
+        sub = re.findall(r"\b(\be.?sub|eng.?sub|english.?sub|malayalam.?sub|multi.?sub|\bm.?sub|hin.?sub|japanese.?subs|hindi.?sub|\bmal.?sub)\b", chk, re.IGNORECASE)
+        if sub:
+            sub = sub[0].replace(" ", "")
+            short_too_full_map = {'esub': 'english sub', 'malsub': 'malayalam sub', 'msub': 'malayalam sub', 'hin': 'hindi', 'eng': 'english', 'multi': 'multiple', 'mal': 'malayalam'}
+            for old_worrd, new_worrd in short_too_full_map.items():
+                if sub == old_worrd:
+                    sub = sub.replace(old_worrd, new_worrd) 
+            sub = f"<b>\n{sub[:-3]} subtitle✅</b>".title()
+        settings = await get_settings(query.message.chat.id)
+        f_caption = f"<blockquote><b>#𝙵𝙸𝙻𝙴_𝙽𝙰𝙼𝙴⇛</b><code>{title}</code>\n{f'{resolutions}' if resolutions else ''}{f'{duration}' if duration else ''}{f'{language}' if language else ''}{f'{sub}' if sub else ''}</blockquote>\n\n <b>ʙʏ⇛[ᴏɴᴀɪʀ_ғɪʟᴛᴇʀᵇᵒᵗ](https://t.me/On_air_Filter_bot)</b>"
+        
     bettons = [[InlineKeyboardButton("ɢʀᴏᴜᴩ 1", url="https://t.me/+PBGW_EV3ldY5YjJl"), InlineKeyboardButton("ɢʀᴏᴜᴩ 2", url="https://t.me/+eDjzTT2Ua6kwMTI1")]]
     await client.send_cached_media(
         chat_id=message.from_user.id,
@@ -244,6 +285,7 @@ async def start(client, message):
         reply_markup=InlineKeyboardMarkup(bettons),
         protect_content=True if pre == 'filep' else False,
     )
+    return await message.delete()
                     
 
 @Client.on_message(filters.command('channel') & filters.user(ADMINS))
