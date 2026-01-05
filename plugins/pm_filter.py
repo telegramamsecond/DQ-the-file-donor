@@ -1671,7 +1671,7 @@ def split_list(l, n):
         yield l[i:i + n]          
         n += 1
         
-async def auto_filter(client, msg, spoll=False):
+async def auto_filter(client, msg, spoll=False, nomf=False):
     reqstr1 = msg.from_user.id if msg.from_user else 0
     reqstr = await client.get_users(reqstr1)
     if not spoll:
@@ -1750,6 +1750,8 @@ async def auto_filter(client, msg, spoll=False):
                             except Exception as e:
                                 print(e)
                             return
+                    if nomf:
+                        return
                     kuttons = []
                     kuttons.append(
                         [InlineKeyboardButton(text="ᴍᴀʟ", callback_data="instr_mal"), InlineKeyboardButton(text="ᴛᴀᴍ", callback_data="instr_tam"), InlineKeyboardButton(text="ʜɪɴ", callback_data="instr_hin"), InlineKeyboardButton(text="ᴇɴɢ", callback_data="instr_eng")]
@@ -2127,7 +2129,7 @@ async def manual_filters(client, message, text=False):
                             try:
                                 nyva = BUT[sesna]
                             except:
-                                await auto_filter(client, message)
+                                await auto_filter(client, message, spoll=False, nomf=True)
                             try:
                                 if settings['auto_delete']:
                                     await asyncio.sleep(360)
@@ -2161,7 +2163,7 @@ async def manual_filters(client, message, text=False):
                             try:
                                 nyva = BUT[sesna]
                             except:
-                                await auto_filter(client, message)
+                                await auto_filter(client, message, spoll=False, nomf=True)
                             try:
                                 if settings['auto_delete']:
                                     await asyncio.sleep(360)
@@ -2193,7 +2195,7 @@ async def manual_filters(client, message, text=False):
                         try:
                             nyva = BUT[sesna]
                         except:
-                            await auto_filter(client, message)
+                            await auto_filter(client, message, spoll=False, nomf=True)
                         try:
                             if settings['auto_delete']:
                                 await asyncio.sleep(360)
@@ -2225,7 +2227,7 @@ async def manual_filters(client, message, text=False):
                         try:
                             nyva = BUT[sesna]
                         except:
-                            await auto_filter(client, message)
+                            await auto_filter(client, message, spoll=False, nomf=True)
                         try:
                             if settings['auto_delete']:
                                 await asyncio.sleep(360)
